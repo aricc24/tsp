@@ -1,7 +1,7 @@
-import db_connector/db_sqlite
+import persistence/database
+import models/city
 
-let db = open("data/tsp.db", "", "", "")
+let cities = getCities("data/tsp.db")
 
-echo "Conexion :3"
-
-db.close()
+echo "no ciudades:", cities.len
+echo "Primera ciudad", cities[0].name
