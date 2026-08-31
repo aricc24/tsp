@@ -1,6 +1,7 @@
 import persistence/database
 import models/city
 import tsp/distance
+import tsp/weights
 
 let cities = getCities("data/tsp.db")
 let connections = getConnections("data/tsp.db")
@@ -18,3 +19,8 @@ let dn = naturalDistance(cities[0], cities[1])
 echo "Ciudad1", cities[0].name
 echo "Ciudad2", cities[1].name
 echo "dn", dn
+
+let instance = cities[0 .. 9]
+let maxDistance = maximumDistance(instance, connections)
+echo "tamaño s: ", instance.len
+echo "dist max: ", maxDistance
