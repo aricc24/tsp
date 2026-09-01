@@ -2,6 +2,7 @@ import persistence/database
 import models/city
 import tsp/distance
 import tsp/weights
+import tsp/graph
 
 let cities = getCities("data/tsp.db")
 let connections = getConnections("data/tsp.db")
@@ -24,3 +25,9 @@ let instance = cities[0 .. 9]
 let maxDistance = maximumDistance(instance, connections)
 echo "tamaño s: ", instance.len
 echo "dist max: ", maxDistance
+
+let graphi = buildGraph(cities, connections)
+
+echo "d1", graphi.adjacencyMatrix[0][6]
+echo "d2", graphi.adjacencyMatrix[6][0]
+echo "d3", graphi.adjacencyMatrix[0][0]
