@@ -179,7 +179,71 @@ suite "Augmented Weight":
         check abs(result - expected) <= 0
 
 
+suite "Normalizer": 
+    test "Sums the largest n minus one weight": 
+        let cities = @[
+            City(id:1), 
+            City(id:2), 
+            City(id:3), 
+            City(id:4)
+        ]
 
+        let graph = Graph(
+            adjacencyMatrix: @[
+                @[0.0, 100.0, 400.0, 50.0],
+                @[100.0, 0.0, 300.0, 200.0],
+                @[400.0, 300.0, 0.0, 250.0],
+                @[50.0, 200.0, 250.0, 0.0]
+            ]
+        )
+
+        let result = normalizer(cities, graph)
+        let expected = 950.0 
+
+        check abs(result - expected) <= 0
+
+    test "Ignores missing connections": 
+        let cities = @[
+            City(id:1), 
+            City(id:2), 
+            City(id:3)
+        ]
+
+        let graph = Graph(
+            adjacencyMatrix: @[
+                @[0.0, 100.0, 0.0],
+                @[100.0, 0.0, 250.0],
+                @[0.0, 250.0, 0.0]
+            ]
+        )
+
+        let result = normalizer(cities, graph)
+        let expected = 350.0
+
+        check abs(result - expected) <= 0
+
+    
+    test "Slects the largest weights regardless of their order":
+        let cities = @[
+            City(id:1), 
+            City(id:2), 
+            City(id:3), 
+            City(id:4)
+        ]
+
+        let graph = Graph(
+            adjacencyMatrix: @[
+                @[0.0, 10.0, 500.0, 20.0],
+                @[10.0, 0.0, 300.0,40.0],
+                @[500.0, 300.0, 0.0, 200.0],
+                @[20.0,40.0, 200.0, 0.0]
+            ]
+        )
+
+        let result = normalizer(cities, graph)
+        let expected = 1000.0 
+
+        check abs(result - expected) <= 0
 
 
 
