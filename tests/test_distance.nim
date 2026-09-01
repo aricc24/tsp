@@ -45,3 +45,30 @@ suite "Natural Distance":
     let expected = 6_373_000.0 * PI / 2.0
 
     check abs(result - expected) <= Epsilon
+
+  
+  test "Natural Distance between opposite points on the equator": 
+    let cityA = City(
+      id: 1, 
+      name: "A",
+      country: "X",
+      population: 0,
+      latitude: 0.0,
+      longitude: 0.0
+    )
+
+    let cityB = City( 
+      id: 2,
+      name: "B",
+      country: "X",
+      population: 0,
+      latitude: 0.0,
+      longitude: 180.0
+    )
+
+
+    let result = naturalDistance(cityA, cityB)
+    let expected = 6_373_000.0 * PI
+
+    check abs(result - expected) <= Epsilon
+
