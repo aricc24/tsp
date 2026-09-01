@@ -50,3 +50,18 @@ echo "idst max: ", maxDistance
 echo "expected: ", expected
 echo "aw: ", result
 echo "diff: ", abs(result - expected)
+
+
+let testInstance = @[cities[0],cities[6], cities[8]]
+
+let a = testInstance[0].id - 1
+let b = testInstance[1].id - 1
+let c = testInstance[2].id - 1
+
+echo "1-7: ", graphi.adjacencyMatrix[a][b]
+echo "1-9: ", graphi.adjacencyMatrix[a][c]
+echo "7-9: ", graphi.adjacencyMatrix[b][c]
+
+let norm = normalizer(testInstance, graphi)
+
+echo "norm: ", norm
