@@ -2,7 +2,9 @@ import unittest
 import std/math
 import ../src/models/connection
 import ../src/models/city
+import ../src/models/graph
 import ../src/tsp/weights
+import ../src/tsp/distance
 
 const Epsilon = 1e-7
 
@@ -105,6 +107,74 @@ suite "Maximum Distance":
 
         let result = maximumDistance(cities, connections)
         let expected = 0.0
+
+        check abs(result - expected) <= 0
+
+suite "Augmented Weight":
+
+    test "Returns original weight when connection exits": 
+        let cityA = City(
+            id: 1, 
+            name: "A", 
+            country: "X", 
+            population: 0, 
+            latitude: 0.0,
+            longitude: 0.0
+        )
+
+        let cityB = City(
+            id: 2, 
+            name: "B", 
+            country: "X", 
+            population: 0, 
+            latitude: 0.0,
+            longitude: 90.0
+        )
+
+        let graph = Graph(
+            adjacencyMatrix: @[
+                @[0.0, 100.0], 
+                @[100.0, 0.0]
+            ]
+        )
+
+        let maxDist = 500.0
+
+        let result = augmentedWeight(cityA, cityB, graph, maxDist)
+        let expected = 100.0
+
+        check abs(result - expected) <= 0
+    
+
+    test "Uses natural distance times maximum distance when connection does not exists": 
+        let cityA = City(
+            id: 1, 
+            name: "A", 
+            country: "X", 
+            population: 0, 
+            latitude: 0.0,
+            longitude: 0.0
+        )
+
+        let cityB = City(
+            id: 2, 
+            name: "B", 
+            country: "X", 
+            population: 0, 
+            latitude: 0.0,
+            longitude: 90.0
+        )
+
+        let graph = Graph(
+            adjacencyMatrix: @[
+                @[0.0, 0.0], 
+                @[0.0, 0.0]
+            ]
+        )
+
+        let maxDist = 500.0
+        let expected = naturalDistance(cityA, cityB) * maxDist
+        let result = augmentedWeight(cityA, cityB, graph, maxDist)
 
         check abs(result - expected) <= 0
 
