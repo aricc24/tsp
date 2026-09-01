@@ -31,3 +31,22 @@ let graphi = buildGraph(cities, connections)
 echo "d1", graphi.adjacencyMatrix[0][6]
 echo "d2", graphi.adjacencyMatrix[6][0]
 echo "d3", graphi.adjacencyMatrix[0][0]
+
+let u = cities[0]
+let v = cities[6]
+
+let weight = augmentedWeight(u, v, graphi, maxDistance)
+echo "aw: ", weight
+
+let u1 = cities[0]  
+let v1 = cities[1] 
+
+let naturalDist = naturalDistance(u1, v1)
+let expected = naturalDist * maxDistance
+let result = augmentedWeight(u1, v1, graphi, maxDistance)
+
+echo "dist nat: ", naturalDist
+echo "idst max: ", maxDistance
+echo "expected: ", expected
+echo "aw: ", result
+echo "diff: ", abs(result - expected)
