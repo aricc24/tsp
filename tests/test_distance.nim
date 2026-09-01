@@ -5,6 +5,8 @@ import ../src/tsp/distance
 import std/math
 
 const Epsilon = 1e-7
+const ExpectedEarthRadius = 6_373_000.0
+
 
 suite "Natural Distance": 
 
@@ -42,7 +44,7 @@ suite "Natural Distance":
     )
 
     let result = naturalDistance(cityA, cityB)
-    let expected = 6_373_000.0 * PI / 2.0
+    let expected = ExpectedEarthRadius * PI / 2.0
 
     check abs(result - expected) <= Epsilon
 
@@ -68,7 +70,7 @@ suite "Natural Distance":
 
 
     let result = naturalDistance(cityA, cityB)
-    let expected = 6_373_000.0 * PI
+    let expected = ExpectedEarthRadius * PI
 
     check abs(result - expected) <= Epsilon
 
