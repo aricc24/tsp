@@ -1,8 +1,10 @@
 import persistence/database
 import models/city
+import models/graph
 import tsp/distance
 import tsp/weights
 import tsp/graph
+import tsp/cost
 
 let cities = getCities("data/tsp.db")
 let connections = getConnections("data/tsp.db")
@@ -65,3 +67,29 @@ echo "7-9: ", graphi.adjacencyMatrix[b][c]
 let norm = normalizer(testInstance, graphi)
 
 echo "norm: ", norm
+
+let citiesTest = @[
+    City(id: 1, latitude: 0.0, longitude: 0.0),
+    City(id: 2, latitude: 0.0, longitude: 1.0),
+    City(id: 3, latitude: 0.0, longitude: 2.0)
+]
+
+let graphTest = Graph(
+    adjacencyMatrix: @[
+        @[0.0, 100.0, 0.0],
+        @[100.0, 0.0, 200.0],
+        @[0.0, 200.0, 0.0]
+    ]
+)
+
+let maxDist = 200.0
+let normi = 300.0
+
+let resulti = cost(
+    citiesTest,
+    graphTest,
+    maxDist,
+    normi
+)
+
+echo "Cost: ", resulti
