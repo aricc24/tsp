@@ -93,3 +93,6 @@ let resulti = cost(
 )
 
 echo "Cost: ", resulti
+
+echo naturalDistance(cities[1], cities[6])
+echo naturalDistance(cities[1089], cities[1091])

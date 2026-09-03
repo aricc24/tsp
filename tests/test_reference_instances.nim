@@ -12,10 +12,12 @@ const DatabasePath = "data/tsp.db"
 
 proc loadInstance(path: string, cities: seq[City]): seq[City] =
   let content = readFile(path).strip()
+  let values = content.split(",")
+  result = newSeq[City](values.len)
 
-  for value in content.split(","):
-    let cityId = parseInt(value.strip())
-    result.add(cities[cityId - 1])
+  for i in 0 ..< values.len:
+    let cityId = parseInt(values[i].strip())
+    result[i] = cities[cityId - 1]
 
 
 let cities = getCities(DatabasePath)
@@ -35,7 +37,8 @@ suite "Reference instances":
     let refMaxDist = 4970123.960000000
     let refNorm = 181500915.920000017
     let refEvaluation = 4037072.073965357
-
+    
+    #[
     echo "\ninput-40:"
     echo "Maximum:"
     echo "mine:", maxDist
@@ -51,6 +54,7 @@ suite "Reference instances":
     echo "mine:", evaluation
     echo "ref:", refEvaluation
     echo  "diff", abs(evaluation - refEvaluation)
+    ]#
 
     check abs(maxDist - 4970123.960000000) <= Epsilon
     check abs(norm - 181500915.920000017) <= Epsilon
@@ -69,6 +73,7 @@ suite "Reference instances":
     let refNorm = 722598785.020000100
     let refEvaluation = 6092371.483582111
 
+    #[
     echo "\ninput-150:"
     echo "Maximum:"
     echo "mine:", maxDist
@@ -84,6 +89,7 @@ suite "Reference instances":
     echo "mine:", evaluation
     echo "ref:", refEvaluation
     echo  "diff", abs(evaluation - refEvaluation)
+    ]#
 
     check abs(maxDist - 4978506.480000000) <= Epsilon
     check abs(norm - 722598785.020000100) <= Epsilon

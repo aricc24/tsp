@@ -12,10 +12,11 @@ proc getCities*(databasePath: string): seq[City] =
 
     )
 
-    var cities: seq[City] = @[]
+    var cities = newSeq[City](rows.len)
 
-    for row in rows: 
-        let city = City(
+    for i in 0 ..< rows.len:
+        let row = rows[i]
+        cities[i] = City(
             id: parseInt(row[0]),
             name: row[1], 
             country: row[2], 
@@ -23,8 +24,6 @@ proc getCities*(databasePath: string): seq[City] =
             latitude: parseFloat(row[4]), 
             longitude: parseFloat(row[5])
         )
-
-        cities.add(city)
 
     return cities
 
@@ -36,15 +35,14 @@ proc getConnections*(databasePath: string): seq[Connection] =
         sql"SELECT id_city_1, id_city_2, distance FROM connections"
     )
 
-    var connections: seq[Connection] = @[]
+    var connections = newSeq[Connection](rows.len)
 
-    for row in rows: 
-        let connection = Connection(
+    for i in 0 ..< rows.len:
+        let row = rows[i]
+        connections[i] = Connection(
             city1Id: parseInt(row[0]),
             city2Id: parseInt(row[1]), 
             distance: parseFloat(row[2])
         )
-
-        connections.add(connection)
 
     return connections
