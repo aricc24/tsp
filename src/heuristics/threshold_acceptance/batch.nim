@@ -1,7 +1,8 @@
 import std/random
 import ./neighbor
+import ./config
 
-proc calculateBatch*[T](solution: var seq[T], temperature: float, batchSize: int, maxAttempts: int , rng: var Rand, costFunction: proc(solution: seq[T]): float): 
+proc calculateBatch*[T](solution: var seq[T], temperature: float, config:ThresholdConfig, rng: var Rand, costFunction: proc(solution: seq[T]): float): 
                         tuple[average: float, accepted:int] =
 
     var accepted = 0
@@ -9,7 +10,7 @@ proc calculateBatch*[T](solution: var seq[T], temperature: float, batchSize: int
     var totalCost = 0.0
     var currentCost = costFunction(solution)
 
-    while accepted < batchSize and attempts < maxAttempts: 
+    while accepted < config.batchSize and attempts < config.maxAttempts: 
         let move = neighbor(solution, rng)
         let neighborCost = costFunction(solution)
 
