@@ -12,8 +12,10 @@ proc thresholdAcceptance*[T](solution: var seq[T], config: ThresholdConfig, rng:
 
     while temperature > config.epsilon: 
         var previousAverage = Inf
+        var batches = 0
 
-        while currentAverage <= previousAverage: 
+        while currentAverage <= previousAverage and
+                batches < config.maxAttempts: 
             previousAverage = currentAverage
 
             let batchResult = calculateBatch(
@@ -24,12 +26,17 @@ proc thresholdAcceptance*[T](solution: var seq[T], config: ThresholdConfig, rng:
                 costFunction
             )
 
-            currentAverage = batchResult.average
+            inc batches
 
             if batchResult.bestCost < bestCost: 
                 bestCost = batchResult.bestCost
-                bestSolution = batchResult. bestSolution
-        
+                bestSolution = batchResult.bestSolution
+            
+            if batchResult.accepted == 0: 
+                break
+
+            currentAverage = batchResult.average
+ 
         temperature *= config.coolingFactor
     
     return(bestSolution: bestSolution, bestCost: bestCost)

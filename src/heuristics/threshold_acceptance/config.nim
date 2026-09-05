@@ -6,3 +6,4 @@ type
     coolingFactor*: float
     batchSize*: int
     maxAttempts*: int
+    maxBatchesPerTemperature*: int
