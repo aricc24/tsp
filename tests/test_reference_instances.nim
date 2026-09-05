@@ -1,24 +1,12 @@
-import std/[unittest, strutils]
-
-import ../src/models/city
+import unittest
 import ../src/persistence/database
+import ../src/persistence/instance_file
 import ../src/tsp/graph
 import ../src/tsp/weights
 import ../src/tsp/cost
 
 const Epsilon = 1e-6
 const DatabasePath = "data/tsp.db"
-
-
-proc loadInstance(path: string, cities: seq[City]): seq[City] =
-  let content = readFile(path).strip()
-  let values = content.split(",")
-  result = newSeq[City](values.len)
-
-  for i in 0 ..< values.len:
-    let cityId = parseInt(values[i].strip())
-    result[i] = cities[cityId - 1]
-
 
 let cities = getCities(DatabasePath)
 let connections = getConnections(DatabasePath)
@@ -56,9 +44,9 @@ suite "Reference instances":
     echo  "diff", abs(evaluation - refEvaluation)
     ]#
 
-    check abs(maxDist - 4970123.960000000) <= Epsilon
-    check abs(norm - 181500915.920000017) <= Epsilon
-    check abs(evaluation - 4037072.073965357) <= Epsilon
+    check abs(maxDist - refMaxDist) <= Epsilon
+    check abs(norm - refNorm) <= Epsilon
+    check abs(evaluation - refEvaluation) <= Epsilon
     
 
 
@@ -91,6 +79,6 @@ suite "Reference instances":
     echo  "diff", abs(evaluation - refEvaluation)
     ]#
 
-    check abs(maxDist - 4978506.480000000) <= Epsilon
-    check abs(norm - 722598785.020000100) <= Epsilon
-    check abs(evaluation - 6092371.483582111) <= Epsilon
+    check abs(maxDist - refMaxDist) <= Epsilon
+    check abs(norm - refNorm) <= Epsilon
+    check abs(evaluation - refEvaluation) <= Epsilon
