@@ -15,7 +15,7 @@ proc thresholdAcceptance*[T](solution: var seq[T], config: ThresholdConfig, rng:
         var batches = 0
 
         while currentAverage <= previousAverage and
-                batches < config.maxAttempts: 
+                batches < config.maxBatchesPerTemperature: 
             previousAverage = currentAverage
 
             let batchResult = calculateBatch(
