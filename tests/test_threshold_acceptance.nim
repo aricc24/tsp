@@ -6,8 +6,6 @@ import ../src/tsp/cost
 import ../src/heuristics/threshold_acceptance/config
 import ../src/heuristics/threshold_acceptance/threshold_acceptance
 
-const Epsilon = 1e-7
-
 
 suite "Threshold Acceptance":
 
@@ -156,3 +154,51 @@ suite "Threshold Acceptance":
 
         check result.bestSolution == original
         check abs(result.bestCost - initialCost) == 0
+
+    test "Best solution preserves the original permutation":
+        let graph = Graph(
+            adjacencyMatrix: @[
+                @[0.0, 1.0, 1000.0, 1000.0],
+                @[1.0, 0.0, 1.0, 1000.0],
+                @[1000.0, 1.0, 0.0, 1.0],
+                @[1000.0, 1000.0, 1.0, 0.0]
+            ]
+        )
+
+        var solution = @[
+            City(id: 1),
+            City(id: 3),
+            City(id: 2),
+            City(id: 4)
+        ]
+
+        let original = solution
+
+        let maxDist = 1000.0
+        let norm = 3000.0
+
+        proc tspCost(path: seq[City]): float =
+            cost(path, graph, maxDist, norm)
+
+        let config = ThresholdConfig(
+            initialTemperature: 1.0,
+            epsilon: 0.01,
+            coolingFactor: 0.5,
+            batchSize: 5,
+            maxAttempts: 50,
+            maxBatchesPerTemperature: 20
+        )
+
+        var rng = initRand(123)
+
+        let result = thresholdAcceptance(
+            solution,
+            config,
+            rng,
+            tspCost
+        )
+
+        check result.bestSolution.len == original.len
+
+        for city in original:
+            check city in result.bestSolution
