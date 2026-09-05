@@ -108,5 +108,51 @@ suite "Threshold Acceptance":
             tspCost
         )
 
-        check abs(result1.bestCost - result2.bestCost) <= Epsilon
+        check abs(result1.bestCost - result2.bestCost) == 0
         check result1.bestSolution == result2.bestSolution
+
+    test "Returns initial solution when temperature is already below epsilon":
+        let graph = Graph(
+            adjacencyMatrix: @[
+                @[0.0, 100.0, 300.0],
+                @[100.0, 0.0, 200.0],
+                @[300.0, 200.0, 0.0]
+            ]
+        )
+
+        var solution = @[
+            City(id: 1),
+            City(id: 2),
+            City(id: 3)
+        ]
+
+        let original = solution
+
+        let maxDist = 300.0
+        let norm = 300.0
+
+        proc tspCost(path: seq[City]): float =
+            cost(path, graph, maxDist, norm)
+
+        let initialCost = tspCost(solution)
+
+        let config = ThresholdConfig(
+            initialTemperature: 0.01,
+            epsilon: 0.01,
+            coolingFactor: 0.5,
+            batchSize: 5,
+            maxAttempts: 50,
+            maxBatchesPerTemperature: 20
+        )
+
+        var rng = initRand(123)
+
+        let result = thresholdAcceptance(
+            solution,
+            config,
+            rng,
+            tspCost
+        )
+
+        check result.bestSolution == original
+        check abs(result.bestCost - initialCost) == 0
