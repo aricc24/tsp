@@ -1,5 +1,6 @@
 import parseopt
 import random
+import strutils
 import ./models/city
 import ./persistence/database
 import ./tsp/graph
@@ -7,13 +8,14 @@ import ./tsp/weights
 import ./tsp/cost
 import ./tsp/feasibility
 import ./heuristics/threshold_acceptance/config
-import ./heuristics/threshold_acceptance/threshold_acceptance
 import ./persistence/instance_file
-
+import ./runner/runner
 
 type CliOptions = object
     databasePath: string
     instancePath: string
+    runs: int
+    seed: int
 
 
 proc parseArguments(): CliOptions = 
@@ -29,6 +31,12 @@ proc parseArguments(): CliOptions =
             
             of "instance", "i": 
                 result.instancePath = value
+           
+            of "runs", "r":
+                result.runs = parseInt(value)
+                
+            of "seed", "s":
+                result.seed = parseInt(value)
             
             else: 
                 raise newException(ValueError, "Unknown flag" & key)
@@ -69,22 +77,24 @@ proc main() =
 
     let config = ThresholdConfig(
         initialTemperature: 1.0,
-        epsilon: 0.01,
-        coolingFactor: 0.9,
-        batchSize: solution.len,
+        epsilon: 0.0001,
+        coolingFactor: 0.99,
+        batchSize: 2000,
         maxAttempts: 10 * solution.len,
-        maxBatchesPerTemperature: 20
+        maxBatchesPerTemperature: 200
     )
 
-    var rng = initRand(123)
 
     let initialCost = tspCost(solution)
 
-    let result = thresholdAcceptance(solution,config,rng,tspCost)
+    let result = runMultiple(solution, config, options.runs, options.seed, tspCost)
 
     echo "Instance: ", options.instancePath
+    echo "Runs:", options.runs
+    echo "Base seed:", options.seed
     echo "Initial cost: ", initialCost
     echo "Best cost: ", result.bestCost
+    echo "Best seed:", result.bestSeed
     echo "Feasible: ",
         if isFeasible(result.bestSolution, graph):
             "YES"
