@@ -6,7 +6,7 @@ type
     RunResult*[T] = object
         bestSolution*: seq[T]
         bestCost*: float
-        bestSeed* int
+        bestSeed*: int
 
 proc runMultiple*[T](initialSolution: seq[T],heuristicConfig: ThresholdConfig, runs: int, baseSeed: int,
     costFunction: proc(solution: seq[T]): float): RunResult[T] =

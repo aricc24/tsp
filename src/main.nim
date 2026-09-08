@@ -10,6 +10,7 @@ import ./tsp/feasibility
 import ./heuristics/threshold_acceptance/config
 import ./persistence/instance_file
 import ./runner/runner
+import ./heuristics/threshold_acceptance/threshold_acceptance
 
 type CliOptions = object
     databasePath: string
@@ -18,7 +19,12 @@ type CliOptions = object
     seed: int
 
 
+#./src/main   --db:data/tsp.db   --instance:data/instances/input-40.tsp   --runs:10000   --seed:2005
+
 proc parseArguments(): CliOptions = 
+    result.runs = 100
+    result.seed = 67
+
     var parser = initOptParser()
 
     for kind, key, value in parser.getopt():
@@ -71,24 +77,30 @@ proc main() =
     var solution = loadInstance(options.instancePath, cities)
     let maxDist = maximumDistance(solution, connections)
     let norm = normalizer(solution,graph)
+    var rng = initRand(options.seed)
 
     proc tspCost(path: seq[City]): float =
         cost(path, graph, maxDist, norm)
 
     let config = ThresholdConfig(
-        initialTemperature: 1.0,
-        epsilon: 0.0001,
-        coolingFactor: 0.99,
-        batchSize: 2000,
-        maxAttempts: 10 * solution.len,
-        maxBatchesPerTemperature: 200
+        initialTemperature: 0.9,
+        epsilon: 0.00001,
+        coolingFactor: 0.9999,
+        batchSize: 5000,
+        maxAttempts: 1000 * solution.len,
+        maxBatchesPerTemperature: 1000
     )
 
 
     let initialCost = tspCost(solution)
+    
+    #let result = thresholdAcceptance(solution, config, rng, tspCost)
 
     let result = runMultiple(solution, config, options.runs, options.seed, tspCost)
 
+    #echo options.seed, ",", result.bestCost, ",", isFeasible(result.bestSolution, graph)
+
+    
     echo "Instance: ", options.instancePath
     echo "Runs:", options.runs
     echo "Base seed:", options.seed
@@ -100,6 +112,7 @@ proc main() =
             "YES"
         else:
             "NO"
+    
         
 when isMainModule:
     main()

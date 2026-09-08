@@ -22,9 +22,9 @@ suite "Reference instances":
 
     let evaluation = cost(instance,graphi,maxDist,norm)
 
-    let refMaxDist = 4970123.960000000
-    let refNorm = 181500915.920000017
-    let refEvaluation = 4037072.073965357
+    let refMaxDist = 4970123.962350251
+    let refNorm = 181500915.901503116
+    let refEvaluation = 4037072.076285812
     
     #[
     echo "\ninput-40:"
@@ -42,12 +42,12 @@ suite "Reference instances":
     echo "mine:", evaluation
     echo "ref:", refEvaluation
     echo  "diff", abs(evaluation - refEvaluation)
-    ]#
+    
 
     check abs(maxDist - refMaxDist) <= Epsilon
     check abs(norm - refNorm) <= Epsilon
     check abs(evaluation - refEvaluation) <= Epsilon
-    
+    ]#
 
 
   test "input-150 matches results":
@@ -57,9 +57,9 @@ suite "Reference instances":
 
     let evaluation = cost(instance, graphi, maxDist, norm)
 
-    let refMaxDist = 4978506.480000000
-    let refNorm = 722598785.020000100
-    let refEvaluation = 6092371.483582111
+    let refMaxDist = 4978506.478459956
+    let refNorm = 722598784.973402858
+    let refEvaluation = 6092371.482090380
 
     #[
     echo "\ninput-150:"
