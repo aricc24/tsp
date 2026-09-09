@@ -17,6 +17,7 @@ type CliOptions = object
     instancePath: string
     runs: int
     seed: int
+    processId: int
 
 
 #./src/main   --db:data/tsp.db   --instance:data/instances/input-40.tsp   --runs:10000   --seed:2005
@@ -24,6 +25,7 @@ type CliOptions = object
 proc parseArguments(): CliOptions = 
     result.runs = 100
     result.seed = 67
+    result.processId = 0
 
     var parser = initOptParser()
 
@@ -44,8 +46,13 @@ proc parseArguments(): CliOptions =
             of "seed", "s":
                 result.seed = parseInt(value)
             
+            of "process", "p":
+                result.processId = parseInt(value)
+            
             else: 
                 raise newException(ValueError, "Unknown flag" & key)
+
+
 
         of cmdArgument: 
             discard
@@ -77,18 +84,17 @@ proc main() =
     var solution = loadInstance(options.instancePath, cities)
     let maxDist = maximumDistance(solution, connections)
     let norm = normalizer(solution,graph)
-    var rng = initRand(options.seed)
 
     proc tspCost(path: seq[City]): float =
         cost(path, graph, maxDist, norm)
 
     let config = ThresholdConfig(
-        initialTemperature: 0.9,
+        initialTemperature: 1000,
         epsilon: 0.00001,
-        coolingFactor: 0.9999,
-        batchSize: 5000,
-        maxAttempts: 1000 * solution.len,
-        maxBatchesPerTemperature: 1000
+        coolingFactor: 0.9955,
+        batchSize: 4000,
+        maxAttempts: 25000000000,
+        maxBatchesPerTemperature: 30000
     )
 
 
@@ -96,11 +102,11 @@ proc main() =
     
     #let result = thresholdAcceptance(solution, config, rng, tspCost)
 
-    let result = runMultiple(solution, config, options.runs, options.seed, tspCost)
+    let result = runMultiple(solution, config, options.runs, options.seed, options.processId, tspCost)
 
     #echo options.seed, ",", result.bestCost, ",", isFeasible(result.bestSolution, graph)
 
-    
+    echo "Process", options.processId, "finished" 
     echo "Instance: ", options.instancePath
     echo "Runs:", options.runs
     echo "Base seed:", options.seed

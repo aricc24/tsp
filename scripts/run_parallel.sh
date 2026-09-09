@@ -1,27 +1,48 @@
-#!/usr/bin/env bash
+set -e
+
+if [ "$#" -ne 5 ]; then
+    echo "Uso:"
+    echo "$0 <db> <instance> <base_seed> <total_runs> <processes>"
+    exit 1
+fi
 
 DB="$1"
 INSTANCE="$2"
 BASE_SEED="$3"
-RUNS="$4"
-JOBS="$5"
+TOTAL_RUNS="$4"
+PROCESSES="$5"
 
-for ((i = 0; i < RUNS; i++)); do
-    SEED=$((BASE_SEED + i))
+RUNS_PER_PROCESS=$((TOTAL_RUNS / PROCESSES))
+REMAINDER=$((TOTAL_RUNS % PROCESSES))
 
-    while (( $(jobs -r -p | wc -l) >= JOBS )); do
-        wait -n
-    done
+echo "Executing $TOTAL_RUNS runs $PROCESSES proccess"
+echo
 
-    echo "Launching run $((i + 1))/$RUNS with seed $SEED"
+CURRENT_SEED=$BASE_SEED
 
-    ./src/main \
+for ((i=0; i<PROCESSES; i++)); do
+    RUNS=$RUNS_PER_PROCESS
+
+    if [ "$i" -lt "$REMAINDER" ]; then
+        RUNS=$((RUNS + 1))
+    fi
+
+    echo "Lunching process $i:"
+    echo "  Runs: $RUNS"
+    echo "  Base seed: $CURRENT_SEED"
+    echo
+
+    ./src/main \ 
         --db:"$DB" \
         --instance:"$INSTANCE" \
-        --runs:1 \
-        --seed:"$SEED" &
+        --runs:"$RUNS" \
+        --seed:"$CURRENT_SEED" \
+        --process:"$i" &
+
+    CURRENT_SEED=$((CURRENT_SEED + RUNS))
 done
 
 wait
 
-echo "All runs finished."
+echo
+echo "Finished :)."
