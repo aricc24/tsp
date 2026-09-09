@@ -1,7 +1,7 @@
 set -e
 
 if [ "$#" -ne 5 ]; then
-    echo "Uso:"
+    echo "Usage:"
     echo "$0 <db> <instance> <base_seed> <total_runs> <processes>"
     exit 1
 fi
@@ -15,7 +15,7 @@ PROCESSES="$5"
 RUNS_PER_PROCESS=$((TOTAL_RUNS / PROCESSES))
 REMAINDER=$((TOTAL_RUNS % PROCESSES))
 
-echo "Executing $TOTAL_RUNS runs $PROCESSES proccess"
+echo "Executing $TOTAL_RUNS runs in $PROCESSES processes"
 echo
 
 CURRENT_SEED=$BASE_SEED
@@ -27,12 +27,12 @@ for ((i=0; i<PROCESSES; i++)); do
         RUNS=$((RUNS + 1))
     fi
 
-    echo "Lunching process $i:"
+    echo "Launching process $i:"
     echo "  Runs: $RUNS"
     echo "  Base seed: $CURRENT_SEED"
     echo
 
-    ./src/main \ 
+    ./src/main \
         --db:"$DB" \
         --instance:"$INSTANCE" \
         --runs:"$RUNS" \

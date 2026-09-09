@@ -31,9 +31,9 @@ proc calculateBatch*[T](solution: var seq[T], temperature: float, config:Thresho
         
         inc attempts
 
-        if accepted == 0: 
-            return(average: currentCost, accepted: 0, 
-                    bestSolution: bestSolution, bestCost: bestCost)
+    if accepted == 0: 
+        return(average: Inf, accepted: 0, 
+                bestSolution: bestSolution, bestCost: bestCost)
 
     return(average: totalCost/float(accepted), accepted: accepted, 
             bestSolution: bestSolution, bestCost: bestCost)

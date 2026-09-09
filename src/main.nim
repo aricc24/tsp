@@ -87,14 +87,17 @@ proc main() =
 
     proc tspCost(path: seq[City]): float =
         cost(path, graph, maxDist, norm)
+    
+    proc tspFeasible(path: seq[City]): bool =
+        isFeasible(path, graph)
 
     let config = ThresholdConfig(
-        initialTemperature: 1000,
+        initialTemperature: 70000,
         epsilon: 0.00001,
-        coolingFactor: 0.9955,
+        coolingFactor: 0.997,
         batchSize: 4000,
-        maxAttempts: 25000000000,
-        maxBatchesPerTemperature: 30000
+        maxAttempts: 250000000 ,
+        maxBatchesPerTemperature: 12000
     )
 
 
@@ -102,7 +105,7 @@ proc main() =
     
     #let result = thresholdAcceptance(solution, config, rng, tspCost)
 
-    let result = runMultiple(solution, config, options.runs, options.seed, options.processId, tspCost)
+    let result = runMultiple(solution, config, options.runs, options.seed, options.processId, tspCost, tspFeasible)
 
     #echo options.seed, ",", result.bestCost, ",", isFeasible(result.bestSolution, graph)
 
