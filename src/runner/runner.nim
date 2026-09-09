@@ -8,7 +8,7 @@ type
         bestCost*: float
         bestSeed*: int
 
-proc runMultiple*[T](initialSolution: seq[T],heuristicConfig: ThresholdConfig, runs: int, baseSeed: int,
+proc runMultiple*[T](initialSolution: seq[T],heuristicConfig: ThresholdConfig, runs: int, baseSeed: int, processId:int,
     costFunction: proc(solution: seq[T]): float): RunResult[T] =
 
     var globalBestSolution = initialSolution[0 .. ^1]
@@ -27,6 +27,11 @@ proc runMultiple*[T](initialSolution: seq[T],heuristicConfig: ThresholdConfig, r
             globalBestCost = runResult.bestCost
             globalBestSolution = runResult.bestSolution[0 .. ^1]
             globalBestSeed = seed
+        
+        if (runIndex + 1) mod 5 == 0 or runIndex + 1 == runs:
+                        echo "[Process ", processId, "] ",
+                            runIndex + 1, "/", runs, 
+                            " process seeds. Last Seed", seed
 
     return RunResult[T](bestSolution: globalBestSolution,
                         bestCost: globalBestCost,
