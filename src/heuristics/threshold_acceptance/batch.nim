@@ -39,3 +39,4 @@ proc calculateBatch*[T](solution: var seq[T], temperature: float, config:Thresho
             bestSolution: bestSolution, bestCost: bestCost)
 
 
+

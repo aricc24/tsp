@@ -1,6 +1,7 @@
 import parseopt
 import random
 import strutils
+import std/sequtils
 import ./models/city
 import ./persistence/database
 import ./tsp/graph
@@ -151,6 +152,7 @@ proc main() =
     #echo "Initial cost: ", initialCost
     echo "Best cost: ", result.bestCost
     echo "Best seed:", result.bestSeed
+    echo "Best solution:", result.bestSolution
     echo "Feasible: ",
         if isFeasible(result.bestSolution, graph):
             "YES"

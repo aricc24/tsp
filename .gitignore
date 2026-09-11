@@ -22,3 +22,4 @@ nimcache/
 .DS_Store
 nimble.develop
 nimbledeps
+evaluation.txt
