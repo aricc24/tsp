@@ -5,7 +5,7 @@ import ../src/models/graph
 import ../src/tsp/cost
 import ../src/heuristics/threshold_acceptance/config
 import ../src/runner/runner
-
+import ../src/tsp/feasibility
 
 let testGraph = Graph(
   adjacencyMatrix: @[
@@ -29,6 +29,10 @@ let norm = 3000.0
 proc tspCost(path: seq[City]): float =
   cost(path, testGraph, maxDist, norm)
 
+
+proc testFeasible(path: seq[City]): bool =
+    isFeasible(path, testGraph)
+
 let cfg = ThresholdConfig(
   initialTemperature: 1.0,
   epsilon: 0.01,
@@ -42,8 +46,8 @@ let cfg = ThresholdConfig(
 suite "Runner":
 
   test "Same base seed produces the same result":
-    let result1 = runMultiple(initialSolution, cfg, 5, 123, 0, tspCost)
-    let result2 = runMultiple(initialSolution, cfg, 5, 123, 0, tspCost)
+    let result1 = runMultiple(initialSolution, cfg, 5, 123, 0, tspCost, testFeasible)
+    let result2 = runMultiple(initialSolution, cfg, 5, 123, 0, tspCost, testFeasible)
 
     check result1.bestCost == result2.bestCost
     check result1.bestSeed == result2.bestSeed
@@ -51,6 +55,6 @@ suite "Runner":
 
   test "Best result is not worse than initial solution":
     let initialCost = tspCost(initialSolution)
-    let result = runMultiple(initialSolution, cfg, 5, 123, 0, tspCost)
+    let result = runMultiple(initialSolution, cfg, 5, 123, 0, tspCost, testFeasible)
 
     check result.bestCost <= initialCost

@@ -91,13 +91,18 @@ proc main() =
     proc tspFeasible(path: seq[City]): bool =
         isFeasible(path, graph)
 
+    #let n = solution.len
+    #let batchSize = 4000
+    #let maxAttemptsByN = n * n * 2
+    #let maxAttemptsFloor = batchSize * 10
+
     let config = ThresholdConfig(
-        initialTemperature: 70000,
+        initialTemperature: 75000,
         epsilon: 0.00001,
-        coolingFactor: 0.997,
-        batchSize: 4000,
-        maxAttempts: 250000000 ,
-        maxBatchesPerTemperature: 12000
+        coolingFactor: 0.9995,
+        batchSize: 4500,
+        maxAttempts: 75000 ,
+        maxBatchesPerTemperature: 3000 #subir este
     )
 
 
