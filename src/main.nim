@@ -19,6 +19,14 @@ type CliOptions = object
     seed: int
     processId: int
 
+    initialTemperature: float
+    epsilon: float
+    coolingFactor: float
+    batchSize: int
+    maxAttempts: int
+    maxBatchesPerTemperature: int
+
+
 
 #./src/main   --db:data/tsp.db   --instance:data/instances/input-40.tsp   --runs:10000   --seed:2005
 
@@ -26,6 +34,13 @@ proc parseArguments(): CliOptions =
     result.runs = 100
     result.seed = 67
     result.processId = 0
+
+    result.initialTemperature = 75000
+    result.epsilon = 0.00001
+    result.coolingFactor = 0.9995
+    result.batchSize = 4500
+    result.maxAttempts = 75000
+    result.maxBatchesPerTemperature = 3000
 
     var parser = initOptParser()
 
@@ -49,6 +64,23 @@ proc parseArguments(): CliOptions =
             of "process", "p":
                 result.processId = parseInt(value)
             
+            of "temperature":
+                result.initialTemperature = parseFloat(value)
+
+            of "epsilon":
+                result.epsilon = parseFloat(value)
+
+            of "cooling":
+                result.coolingFactor = parseFloat(value)
+
+            of "batch-size":
+                result.batchSize = parseInt(value)
+
+            of "max-attempts":
+                result.maxAttempts = parseInt(value)
+
+            of "max-batches":
+                result.maxBatchesPerTemperature = parseInt(value)
             else: 
                 raise newException(ValueError, "Unknown flag" & key)
 
@@ -91,18 +123,14 @@ proc main() =
     proc tspFeasible(path: seq[City]): bool =
         isFeasible(path, graph)
 
-    #let n = solution.len
-    #let batchSize = 4000
-    #let maxAttemptsByN = n * n * 2
-    #let maxAttemptsFloor = batchSize * 10
 
     let config = ThresholdConfig(
-        initialTemperature: 75000,
-        epsilon: 0.00001,
-        coolingFactor: 0.9995,
-        batchSize: 4500,
-        maxAttempts: 75000 ,
-        maxBatchesPerTemperature: 3000 #subir este
+        initialTemperature: options.initialTemperature,
+        epsilon: options.epsilon,
+        coolingFactor: options.coolingFactor,
+        batchSize: options.batchSize,
+        maxAttempts: options.maxAttempts,
+        maxBatchesPerTemperature: options.maxBatchesPerTemperature
     )
 
 
@@ -121,6 +149,7 @@ proc main() =
     echo "Initial cost: ", initialCost
     echo "Best cost: ", result.bestCost
     echo "Best seed:", result.bestSeed
+    echo "Feasible runs: ", result.feasibleRuns, "/", options.runs
     echo "Feasible: ",
         if isFeasible(result.bestSolution, graph):
             "YES"
