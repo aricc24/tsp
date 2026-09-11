@@ -1,16 +1,21 @@
 set -e
 
-if [ "$#" -ne 5 ]; then
+if [ "$#" -ne 1 ]; then
     echo "Usage:"
-    echo "$0 <db> <instance> <base_seed> <total_runs> <processes>"
+    echo "$0 <instance>"
     exit 1
 fi
 
-DB="$1"
-INSTANCE="$2"
-BASE_SEED="$3"
-TOTAL_RUNS="$4"
-PROCESSES="$5"
+INSTANCE="$1"
+CONFIG="config/experiment.conf"
+
+if [ ! -f "$CONFIG" ]; then
+    echo "Configuration file not found: $CONFIG"
+    exit 1
+fi
+
+source "$CONFIG"
+
 
 RUNS_PER_PROCESS=$((TOTAL_RUNS / PROCESSES))
 REMAINDER=$((TOTAL_RUNS % PROCESSES))
