@@ -31,10 +31,10 @@ for ((i=0; i<PROCESSES; i++)); do
         RUNS=$((RUNS + 1))
     fi
 
-    echo "Launching process $i:"
-    echo "  Runs: $RUNS"
-    echo "  Base seed: $CURRENT_SEED"
-    echo
+    #echo "Launching process $i:"
+    #echo "  Runs: $RUNS"
+    #echo "  Base seed: $CURRENT_SEED"
+    #echo
 
     ./src/main \
         --db:"$DB" \

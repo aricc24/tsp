@@ -40,7 +40,7 @@ proc runMultiple*[T](initialSolution: seq[T],heuristicConfig: ThresholdConfig, r
                 " | Seed: ", globalBestSeed,
                 " | Feasible runs: ", feasibleRuns, "/", runIndex + 1,
                 " | Run: ", runIndex + 1, "/", runs,
-                " | Best feasible: ",
+                " | Is feasible: ",
                 if runIsFeasible:
                     "YES"
                 else:

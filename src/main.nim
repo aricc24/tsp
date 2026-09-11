@@ -12,6 +12,11 @@ import ./persistence/instance_file
 import ./runner/runner
 import ./heuristics/threshold_acceptance/threshold_acceptance
 
+#nim c -d:release src/main.nim
+#./scripts/tsp.sh  data/instances/input-150.tsp
+
+
+
 type CliOptions = object
     databasePath: string
     instancePath: string
@@ -25,10 +30,6 @@ type CliOptions = object
     batchSize: int
     maxAttempts: int
     maxBatchesPerTemperature: int
-
-
-
-#./scripts/tsp.sh  data/instances/input-150.tsp
 
 
 proc parseArguments(): CliOptions = 
