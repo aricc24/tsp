@@ -30,3 +30,34 @@ proc cost*(path: seq[City], graph: Graph, maxDist: float, norm: float): float =
         cost += edgeCost(u, v, graph, maxDist, norm)
 
     return cost
+
+proc swappedCity(path: seq[City], index: int, i: int, j: int): City =
+    if index == i:
+        return path[j]
+
+    if index == j:
+        return path[i]
+
+    return path[index]
+
+
+proc incrementalCost*(path: seq[City], currentCost: float, i: int, j:int, 
+        graph: Graph, maxDist: float, norm: float): float = 
+     
+     var oldEdgesCost = 0.0
+     var newEdgesCost = 0.0
+
+     let edges = affectedEdges(path.len, i, j)
+
+     for edge in edges: 
+        let newU = path[edge]
+        let newV = path[edge + 1]
+
+        newEdgesCost += edgeCost(newU, newV, graph, maxDist, norm)
+
+        let oldU = swappedCity(path, edge, i, j)
+        let oldV = swappedCity(path, edge + 1, i, j)
+
+        oldEdgesCost += edgeCost(oldU, oldV, graph, maxDist, norm)
+
+     return currentCost - oldEdgesCost + newEdgesCost
