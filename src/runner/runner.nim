@@ -16,7 +16,7 @@ proc runMultiple*[T](initialSolution: seq[T],heuristicConfig: ThresholdConfig, r
     var globalBestCost = costFunction(initialSolution)
     var globalBestSeed = baseSeed
     var feasibleRuns = 0
-
+    
     for runIndex in 0 ..< runs:
         let seed = baseSeed + runIndex
 
@@ -25,21 +25,27 @@ proc runMultiple*[T](initialSolution: seq[T],heuristicConfig: ThresholdConfig, r
         rng.shuffle(solution)
 
         let runResult = thresholdAcceptance(solution, heuristicConfig, rng, costFunction)
+        let runIsFeasible = feasibilityFunction(runResult.bestSolution)
 
-        if feasibilityFunction(runResult.bestSolution): 
+        if runIsFeasible: 
             inc feasibleRuns
 
         if runResult.bestCost < globalBestCost:
             globalBestCost = runResult.bestCost
             globalBestSolution = runResult.bestSolution[0 .. ^1]
             globalBestSeed = seed
-        
-        if (runIndex + 1) mod 5 == 0 or runIndex + 1 == runs:
-                        echo "[Process ", processId, "] ",
-                            runIndex + 1, "/", runs, 
-                            " | Best: ", globalBestCost,
-                            " | Best seed: ", globalBestSeed,
-                            " | Feasible: ", feasibleRuns, "/", runIndex + 1
+
+            echo "[Process ", processId, "] ",
+                "New best: ", globalBestCost,
+                " | Seed: ", globalBestSeed,
+                " | Feasible runs: ", feasibleRuns, "/", runIndex + 1,
+                " | Run: ", runIndex + 1, "/", runs,
+                " | Best feasible: ",
+                if runIsFeasible:
+                    "YES"
+                else:
+                    "NO"
+
 
     return RunResult[T](bestSolution: globalBestSolution,
                         bestCost: globalBestCost,

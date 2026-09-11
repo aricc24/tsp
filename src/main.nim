@@ -28,7 +28,8 @@ type CliOptions = object
 
 
 
-#./src/main   --db:data/tsp.db   --instance:data/instances/input-40.tsp   --runs:10000   --seed:2005
+#./scripts/tsp.sh  data/instances/input-150.tsp
+
 
 proc parseArguments(): CliOptions = 
     result.runs = 100
@@ -142,14 +143,13 @@ proc main() =
 
     #echo options.seed, ",", result.bestCost, ",", isFeasible(result.bestSolution, graph)
 
-    echo "Process", options.processId, "finished" 
-    echo "Instance: ", options.instancePath
-    echo "Runs:", options.runs
+    #echo "Process", options.processId, "finished" 
+    #echo "Instance: ", options.instancePath
+    #echo "Runs:", options.runs
     echo "Base seed:", options.seed
-    echo "Initial cost: ", initialCost
+    #echo "Initial cost: ", initialCost
     echo "Best cost: ", result.bestCost
     echo "Best seed:", result.bestSeed
-    echo "Feasible runs: ", result.feasibleRuns, "/", options.runs
     echo "Feasible: ",
         if isFeasible(result.bestSolution, graph):
             "YES"
