@@ -83,4 +83,17 @@ suite "Cost":
 
         check abs(result - expected) <= Epsilon
 
+suite "Affected edges":
+
+    test "two internal non-adjacent positions":
+        check affectedEdges(6, 1, 4) == @[0, 1, 3, 4]
+
+    test "one endpoint and one internal position":
+        check affectedEdges(5, 0, 3) == @[0, 2, 3]
+
+    test "two endpoints":
+        check affectedEdges(5, 0, 4) == @[0, 3]
+
+    test "two adjacent internal positions":
+        check affectedEdges(5, 1, 2) == @[0, 1, 2]
 
