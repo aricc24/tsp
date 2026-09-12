@@ -43,12 +43,14 @@ suite "Batch":
 
         var rng = initRand(123)
 
+        let currentCost = tspCost(solution)
+
         let result = calculateBatch(
             solution,
             temperature = 10.0,
             config = config,
             rng = rng,
-            costFunction = tspCost,
+            currentCost = currentCost,
             neighborCostFunction = tspNeighborCost
         )
 
@@ -89,12 +91,14 @@ suite "Batch":
 
         var rng = initRand(123)
 
+        let currentCost = tspCost(solution)
+
         let result = calculateBatch(
             solution,
             temperature = 0.0,
             config = config,
             rng = rng,
-            costFunction = tspCost,
+            currentCost = currentCost,
             neighborCostFunction = tspNeighborCost
         )
 
@@ -136,12 +140,14 @@ suite "Batch":
 
         var rng = initRand(7)
 
+        let currentCost = tspCost(solution)
+
         let result = calculateBatch(
             solution,
             temperature = 0.0,
             config = config,
             rng = rng,
-            costFunction = tspCost,
+            currentCost = currentCost,
             neighborCostFunction = tspNeighborCost
 
         )

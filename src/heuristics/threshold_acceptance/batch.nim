@@ -2,14 +2,14 @@ import std/random
 import ./neighbor
 import ./config
 
-proc calculateBatch*[T](solution: var seq[T], temperature: float, config:ThresholdConfig, rng: var Rand, costFunction: proc(solution: seq[T]): float, 
+proc calculateBatch*[T](solution: var seq[T], temperature: float, config:ThresholdConfig, rng: var Rand, currentCost: float, 
         neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float ): 
-                tuple[average: float, accepted:int, bestSolution: seq[T], bestCost: float] =
+                tuple[average: float, accepted:int, bestSolution: seq[T], bestCost: float, currentCost: float] =
 
+    var currentCost = currentCost
     var accepted = 0
     var attempts = 0
     var totalCost = 0.0
-    var currentCost = costFunction(solution)
 
     var bestSolution = solution[0 .. ^1]
     var bestCost = currentCost
@@ -34,10 +34,10 @@ proc calculateBatch*[T](solution: var seq[T], temperature: float, config:Thresho
 
         if accepted == 0: #soy consciente
             return(average: currentCost, accepted: 0, 
-                    bestSolution: bestSolution, bestCost: bestCost)
+                    bestSolution: bestSolution, bestCost: bestCost, currentCost: currentCost)
 
     return(average: totalCost/float(accepted), accepted: accepted, 
-            bestSolution: bestSolution, bestCost: bestCost)
+            bestSolution: bestSolution, bestCost: bestCost, currentCost: currentCost)
 
 
 

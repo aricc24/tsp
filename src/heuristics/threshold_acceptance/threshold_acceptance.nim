@@ -9,7 +9,8 @@ proc thresholdAcceptance*[T](solution: var seq[T], config: ThresholdConfig, rng:
     var temperature = config.initialTemperature
     var currentAverage = 0.0
     var bestSolution = solution[0 .. ^1]
-    var bestCost = costFunction(solution)
+    var currentCost = costFunction(solution)
+    var bestCost = currentCost
 
     while temperature > config.epsilon: 
         var previousAverage = Inf
@@ -24,9 +25,11 @@ proc thresholdAcceptance*[T](solution: var seq[T], config: ThresholdConfig, rng:
                 temperature, 
                 config, 
                 rng,
-                costFunction, 
+                currentCost, 
                 neighborCostFunction
             )
+
+            currentCost = batchResult.currentCost
 
             inc batches
 
