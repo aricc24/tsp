@@ -25,17 +25,15 @@ proc thresholdAcceptance*[T](solution: var seq[T], config: ThresholdConfig, rng:
                 temperature, 
                 config, 
                 rng,
-                currentCost, 
+                currentCost,
+                bestSolution, 
+                bestCost,  
                 neighborCostFunction
             )
 
             currentCost = batchResult.currentCost
 
             inc batches
-
-            if batchResult.bestCost < bestCost: 
-                bestCost = batchResult.bestCost
-                bestSolution = batchResult.bestSolution
             
             if batchResult.accepted == 0: 
                 break

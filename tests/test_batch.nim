@@ -6,6 +6,8 @@ import ../src/tsp/cost
 import ../src/heuristics/threshold_acceptance/batch
 import ../src/heuristics/threshold_acceptance/config
 
+const Epsilon = 1e-7
+
 suite "Batch":
 
     test "Completes a batch when temperature is high enough":
@@ -44,6 +46,8 @@ suite "Batch":
         var rng = initRand(123)
 
         let currentCost = tspCost(solution)
+        var bestSolution = solution[0 .. ^1]
+        var bestCost = currentCost
 
         let result = calculateBatch(
             solution,
@@ -51,11 +55,14 @@ suite "Batch":
             config = config,
             rng = rng,
             currentCost = currentCost,
+            bestSolution = bestSolution,
+            bestCost = bestCost,
             neighborCostFunction = tspNeighborCost
         )
 
         check result.accepted == 3
         check result.average >= 0.0
+        check abs(result.currentCost - tspCost(solution)) <= Epsilon
 
     test "Stops when maximum attempts is reached":
         let graph = Graph(
@@ -92,6 +99,8 @@ suite "Batch":
         var rng = initRand(123)
 
         let currentCost = tspCost(solution)
+        var bestSolution = solution[0 .. ^1]
+        var bestCost = currentCost
 
         let result = calculateBatch(
             solution,
@@ -99,10 +108,13 @@ suite "Batch":
             config = config,
             rng = rng,
             currentCost = currentCost,
+            bestSolution = bestSolution,
+            bestCost = bestCost,
             neighborCostFunction = tspNeighborCost
         )
 
         check result.accepted <= 2
+        check abs(result.currentCost - tspCost(solution)) <= Epsilon
 
     test "Restores solution when neighbor is rejected":
         let graph = Graph(
@@ -141,6 +153,8 @@ suite "Batch":
         var rng = initRand(7)
 
         let currentCost = tspCost(solution)
+        var bestSolution = solution[0 .. ^1]
+        var bestCost = currentCost
 
         let result = calculateBatch(
             solution,
@@ -148,9 +162,12 @@ suite "Batch":
             config = config,
             rng = rng,
             currentCost = currentCost,
+            bestSolution = bestSolution,
+            bestCost = bestCost,
             neighborCostFunction = tspNeighborCost
 
         )
 
         check result.accepted == 0
         check solution == original
+        check abs(result.currentCost - currentCost) <= Epsilon
