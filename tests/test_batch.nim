@@ -28,6 +28,10 @@ suite "Batch":
 
         proc tspCost(path: seq[City]): float =
             cost(path, graph, maxDist, norm)
+        
+        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+            tspCost(path)
+        
 
         let config = ThresholdConfig(
             initialTemperature: 10.0,
@@ -44,7 +48,8 @@ suite "Batch":
             temperature = 10.0,
             config = config,
             rng = rng,
-            costFunction = tspCost
+            costFunction = tspCost,
+            neighborCostFunction = tspNeighborCost
         )
 
         check result.accepted == 3
@@ -70,6 +75,9 @@ suite "Batch":
 
         proc tspCost(path: seq[City]): float =
             cost(path, graph, maxDist, norm)
+    
+        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+            tspCost(path)
 
         let config = ThresholdConfig(
             initialTemperature: 0.0,
@@ -86,7 +94,8 @@ suite "Batch":
             temperature = 0.0,
             config = config,
             rng = rng,
-            costFunction = tspCost
+            costFunction = tspCost,
+            neighborCostFunction = tspNeighborCost
         )
 
         check result.accepted <= 2
@@ -113,6 +122,9 @@ suite "Batch":
 
         proc tspCost(path: seq[City]): float =
             cost(path, graph, maxDist, norm)
+        
+        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+            tspCost(path)
 
         let config = ThresholdConfig(
             initialTemperature: 0.0,
@@ -129,7 +141,9 @@ suite "Batch":
             temperature = 0.0,
             config = config,
             rng = rng,
-            costFunction = tspCost
+            costFunction = tspCost,
+            neighborCostFunction = tspNeighborCost
+
         )
 
         check result.accepted == 0
