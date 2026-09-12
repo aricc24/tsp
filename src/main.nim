@@ -1,7 +1,6 @@
 import parseopt
 import random
 import strutils
-import std/sequtils
 import ./models/city
 import ./persistence/database
 import ./tsp/graph
@@ -126,7 +125,9 @@ proc main() =
     proc tspFeasible(path: seq[City]): bool =
         isFeasible(path, graph)
 
-
+    proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+            incrementalCost(path, currentCost, i, j, graph, maxDist, norm)
+        
     let config = ThresholdConfig(
         initialTemperature: options.initialTemperature,
         epsilon: options.epsilon,
@@ -137,11 +138,9 @@ proc main() =
     )
 
 
-    let initialCost = tspCost(solution)
-    
-    #let result = thresholdAcceptance(solution, config, rng, tspCost)
+    #let initialCost = tspCost(solution)
 
-    let result = runMultiple(solution, config, options.runs, options.seed, options.processId, tspCost, tspFeasible)
+    let result = runMultiple(solution, config, options.runs, options.seed, options.processId, tspCost, tspFeasible, tspNeighborCost)
 
     #echo options.seed, ",", result.bestCost, ",", isFeasible(result.bestSolution, graph)
 
@@ -152,7 +151,7 @@ proc main() =
     #echo "Initial cost: ", initialCost
     echo "Best cost: ", result.bestCost
     echo "Best seed:", result.bestSeed
-    echo "Best solution:", result.bestSolution
+    #echo "Best solution:", result.bestSolution
     echo "Feasible: ",
         if isFeasible(result.bestSolution, graph):
             "YES"

@@ -32,6 +32,11 @@ suite "Threshold Acceptance":
         proc tspCost(path: seq[City]): float =
             cost(path, graph, maxDist, norm)
 
+        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+                tspCost(path)
+            
+
+
         let initialCost = tspCost(solution)
 
         let config = ThresholdConfig(
@@ -49,7 +54,8 @@ suite "Threshold Acceptance":
             solution,
             config,
             rng,
-            tspCost
+            tspCost, 
+            tspNeighborCost
         )
 
         check result.bestCost <= initialCost
@@ -80,6 +86,11 @@ suite "Threshold Acceptance":
         proc tspCost(path: seq[City]): float =
             cost(path, graph, maxDist, norm)
 
+        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+                tspCost(path)
+            
+
+
         let config = ThresholdConfig(
             initialTemperature: 1.0,
             epsilon: 0.01,
@@ -96,14 +107,16 @@ suite "Threshold Acceptance":
             solution1,
             config,
             rng1,
-            tspCost
+            tspCost, 
+            tspNeighborCost
         )
 
         let result2 = thresholdAcceptance(
             solution2,
             config,
             rng2,
-            tspCost
+            tspCost, 
+            tspNeighborCost
         )
 
         check abs(result1.bestCost - result2.bestCost) == 0
@@ -132,6 +145,11 @@ suite "Threshold Acceptance":
         proc tspCost(path: seq[City]): float =
             cost(path, graph, maxDist, norm)
 
+        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+                tspCost(path)
+            
+
+
         let initialCost = tspCost(solution)
 
         let config = ThresholdConfig(
@@ -149,7 +167,8 @@ suite "Threshold Acceptance":
             solution,
             config,
             rng,
-            tspCost
+            tspCost, 
+            tspNeighborCost
         )
 
         check result.bestSolution == original
@@ -179,6 +198,11 @@ suite "Threshold Acceptance":
 
         proc tspCost(path: seq[City]): float =
             cost(path, graph, maxDist, norm)
+        
+        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+                tspCost(path)
+            
+
 
         let config = ThresholdConfig(
             initialTemperature: 1.0,
@@ -195,7 +219,8 @@ suite "Threshold Acceptance":
             solution,
             config,
             rng,
-            tspCost
+            tspCost, 
+            tspNeighborCost
         )
 
         check result.bestSolution.len == original.len
