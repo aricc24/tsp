@@ -3,9 +3,10 @@ import ./batch
 import ./config
 import ./initial_temperature
 
-proc thresholdAcceptance*[T](solution: var seq[T], config: ThresholdConfig, rng: var Rand, costFunction: proc(solution: seq[T]): float, 
-        neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float): 
-            tuple[bestSolution: seq[T], bestCost: float] =
+proc thresholdAcceptance*[T](
+        solution: var seq[T], config: ThresholdConfig, rng: var Rand, costFunction: proc(solution: seq[T]): float, 
+            neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float): 
+                tuple[bestSolution: seq[T], bestCost: float] =
     
     var temperature = config.initialTemperature
     var currentAverage = 0.0
@@ -32,16 +33,8 @@ proc thresholdAcceptance*[T](solution: var seq[T], config: ThresholdConfig, rng:
                 batches < config.maxBatchesPerTemperature: 
             previousAverage = currentAverage
 
-            let batchResult = calculateBatch(
-                solution, 
-                temperature, 
-                config, 
-                rng,
-                currentCost,
-                bestSolution, 
-                bestCost,  
-                neighborCostFunction
-            )
+            let batchResult = calculateBatch(solution, temperature, config, rng, currentCost, 
+                                    bestSolution, bestCost, neighborCostFunction)
 
             currentCost = batchResult.currentCost
 

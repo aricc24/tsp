@@ -2,9 +2,11 @@ import std/random
 import ./neighbor
 import ./config
 
-proc calculateBatch*[T](solution: var seq[T], temperature: float, config:ThresholdConfig, rng: var Rand, currentCost: float, 
-        bestSolution: var seq[T], bestCost: var float, neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float): 
-                tuple[average: float, accepted:int, currentCost: float] =
+proc calculateBatch*[T](
+        solution: var seq[T], temperature: float, config:ThresholdConfig, rng: var Rand, currentCost: float, 
+            bestSolution: var seq[T], bestCost: var float, 
+                neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float): 
+                    tuple[average: float, accepted:int, currentCost: float] =
 
     var currentCost = currentCost
     var accepted = 0

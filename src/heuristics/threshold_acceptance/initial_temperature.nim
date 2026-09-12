@@ -5,9 +5,10 @@ const TemperatureTolerance* = 1e-6
 const AcceptanceTolerance* = 0.01
 
 
-proc calculateAcceptanceRate*[T](solution: var seq[T], currentCost: float, temperature: float, sampleSize: int, 
-        rng: var Rand, neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float):
-            tuple[rate: float, currentCost: float] =
+proc calculateAcceptanceRate*[T](
+        solution: var seq[T], currentCost: float, temperature: float, sampleSize: int, rng: var Rand, 
+                neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float):
+                        tuple[rate: float, currentCost: float] =
 
     var currentCost = currentCost
     var accepted = 0
@@ -25,9 +26,11 @@ proc calculateAcceptanceRate*[T](solution: var seq[T], currentCost: float, tempe
     return (rate: float(accepted)/float(sampleSize), currentCost: currentCost)
 
 
-proc binarySearchTemperature*[T](solution: var seq[T], currentCost: float, lower: float, upper: float, targetAcceptance: float,
-        sampleSize: int, rng: var Rand, neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float): 
-            tuple[temperature: float, currentCost: float] =
+proc binarySearchTemperature*[T](
+        solution: var seq[T], currentCost: float, lower: float, upper: float, targetAcceptance: float, 
+            sampleSize: int, rng: var Rand, 
+                neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float): 
+                    tuple[temperature: float, currentCost: float] =
 
     var currentCost = currentCost
     var lower = lower
@@ -53,7 +56,8 @@ proc binarySearchTemperature*[T](solution: var seq[T], currentCost: float, lower
     return (temperature: (lower + upper)/2.0, currentCost: currentCost)
 
 
-proc initialTemperature*[T](solution: var seq[T], costFunction: proc(solution: seq[T]): float, initialGuess: float,
+proc initialTemperature*[T](
+        solution: var seq[T], costFunction: proc(solution: seq[T]): float, initialGuess: float,
             targetAcceptance: float, sampleSize: int, rng: var Rand, 
                 neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float): 
                         tuple[temperature: float, currentCost: float] =
@@ -85,5 +89,5 @@ proc initialTemperature*[T](solution: var seq[T], costFunction: proc(solution: s
 
     let final = binarySearchTemperature(solution, sample.currentCost, lower, upper, 
                     targetAcceptance, sampleSize, rng, neighborCostFunction)
-                    
+
     return (temperature: final.temperature, currentCost: final.currentCost)
