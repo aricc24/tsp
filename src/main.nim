@@ -25,6 +25,8 @@ type CliOptions = object
     processId: int
 
     initialTemperature: float
+    searchTemperature*: bool
+    targetAcceptance*: float
     epsilon: float
     coolingFactor: float
     batchSize: int
@@ -38,6 +40,8 @@ proc parseArguments(): CliOptions =
     result.processId = 0
 
     result.initialTemperature = 75000
+    result.searchTemperature = false
+    result.targetAcceptance = 0.90
     result.epsilon = 0.00001
     result.coolingFactor = 0.9995
     result.batchSize = 4500
@@ -68,6 +72,12 @@ proc parseArguments(): CliOptions =
             
             of "temperature":
                 result.initialTemperature = parseFloat(value)
+            
+            of "search-temperature":
+                result.searchTemperature = parseBool(value)
+
+            of "target-acceptance":
+                result.targetAcceptance = parseFloat(value)
 
             of "epsilon":
                 result.epsilon = parseFloat(value)
@@ -130,6 +140,8 @@ proc main() =
         
     let config = ThresholdConfig(
         initialTemperature: options.initialTemperature,
+        searchTemperature: options.searchTemperature,
+        targetAcceptance: options.targetAcceptance,
         epsilon: options.epsilon,
         coolingFactor: options.coolingFactor,
         batchSize: options.batchSize,
