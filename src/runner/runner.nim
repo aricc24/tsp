@@ -10,7 +10,9 @@ type
         feasibleRuns*: int
 
 proc runMultiple*[T](initialSolution: seq[T],heuristicConfig: ThresholdConfig, runs: int, baseSeed: int, processId:int,
-    costFunction: proc(solution: seq[T]): float,     feasibilityFunction: proc(solution: seq[T]): bool): RunResult[T] =
+        costFunction: proc(solution: seq[T]): float, feasibilityFunction: proc(solution: seq[T]): bool,         
+        neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float): 
+            RunResult[T] =
 
     var globalBestSolution = initialSolution[0 .. ^1]
     var globalBestCost = costFunction(initialSolution)
@@ -24,7 +26,7 @@ proc runMultiple*[T](initialSolution: seq[T],heuristicConfig: ThresholdConfig, r
         var rng = initRand(seed)
         rng.shuffle(solution)
 
-        let runResult = thresholdAcceptance(solution, heuristicConfig, rng, costFunction)
+        let runResult = thresholdAcceptance(solution, heuristicConfig, rng, costFunction, neighborCostFunction)
         let runIsFeasible = feasibilityFunction(runResult.bestSolution)
 
         if runIsFeasible: 
@@ -49,5 +51,6 @@ proc runMultiple*[T](initialSolution: seq[T],heuristicConfig: ThresholdConfig, r
 
     return RunResult[T](bestSolution: globalBestSolution,
                         bestCost: globalBestCost,
-                        bestSeed: globalBestSeed
+                        bestSeed: globalBestSeed, 
+                        feasibleRuns: feasibleRuns
                     )
