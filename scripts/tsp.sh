@@ -43,6 +43,8 @@ for ((i=0; i<PROCESSES; i++)); do
         --seed:"$CURRENT_SEED" \
         --process:"$i" \
         --temperature:"$INITIAL_TEMPERATURE" \
+        --search-temperature:"$SEARCH_TEMPERATURE" \
+        --target-acceptance:"$TARGET_ACCEPTANCE" \
         --epsilon:"$EPSILON" \
         --cooling:"$COOLING_FACTOR" \
         --batch-size:"$BATCH_SIZE" \
