@@ -3,6 +3,7 @@ import std/random
 import ../src/models/city
 import ../src/models/graph
 import ../src/tsp/cost
+import ../src/tsp/weights
 import ../src/heuristics/threshold_acceptance/batch
 import ../src/heuristics/threshold_acceptance/config
 
@@ -27,9 +28,10 @@ suite "Batch":
 
         let maxDist = 400.0
         let norm = 500.0
+        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
 
         proc tspCost(path: seq[City]): float =
-            cost(path, graph, maxDist, norm)
+            cost(path, augmentedWeights, norm)
         
         proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
             tspCost(path)
@@ -81,9 +83,10 @@ suite "Batch":
 
         let maxDist = 1000.0
         let norm = 2.0
+        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
 
         proc tspCost(path: seq[City]): float =
-            cost(path, graph, maxDist, norm)
+            cost(path, augmentedWeights, norm)
     
         proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
             tspCost(path)
@@ -135,9 +138,10 @@ suite "Batch":
 
         let maxDist = 1000.0
         let norm = 2.0
+        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
 
         proc tspCost(path: seq[City]): float =
-            cost(path, graph, maxDist, norm)
+            cost(path, augmentedWeights, norm)
         
         proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
             tspCost(path)

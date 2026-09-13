@@ -3,6 +3,7 @@ import random
 import ../src/models/city
 import ../src/models/graph
 import ../src/tsp/cost
+import ../src/tsp/weights
 import ../src/heuristics/threshold_acceptance/config
 import ../src/heuristics/threshold_acceptance/threshold_acceptance
 
@@ -28,9 +29,10 @@ suite "Threshold Acceptance":
 
         let maxDist = 1000.0
         let norm = 3000.0
+        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
 
         proc tspCost(path: seq[City]): float =
-            cost(path, graph, maxDist, norm)
+            cost(path, augmentedWeights, norm)
 
         proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
                 tspCost(path)
@@ -82,9 +84,10 @@ suite "Threshold Acceptance":
 
         let maxDist = 1000.0
         let norm = 3000.0
+        let augmentedWeights = buildAugmentedWeights(initialSolution, graph, maxDist)
 
         proc tspCost(path: seq[City]): float =
-            cost(path, graph, maxDist, norm)
+            cost(path, augmentedWeights, norm)
 
         proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
                 tspCost(path)
@@ -141,9 +144,10 @@ suite "Threshold Acceptance":
 
         let maxDist = 300.0
         let norm = 300.0
+        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
 
         proc tspCost(path: seq[City]): float =
-            cost(path, graph, maxDist, norm)
+            cost(path, augmentedWeights, norm)
 
         proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
                 tspCost(path)
@@ -195,9 +199,10 @@ suite "Threshold Acceptance":
 
         let maxDist = 1000.0
         let norm = 3000.0
+        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
 
         proc tspCost(path: seq[City]): float =
-            cost(path, graph, maxDist, norm)
+            cost(path, augmentedWeights, norm)
         
         proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
                 tspCost(path)

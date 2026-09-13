@@ -1,9 +1,9 @@
 import unittest
 import std/random
-
 import ../src/models/city
 import ../src/models/graph
 import ../src/tsp/cost
+import ../src/tsp/weights
 import ../src/heuristics/threshold_acceptance/initial_temperature
 
 const Epsilon = 1e-7
@@ -27,9 +27,10 @@ suite "Initial Temperature":
 
         let maxDist = 30.0
         let norm = 60.0
+        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
 
         proc tspCost(path: seq[City]): float =
-            cost(path, graph, maxDist, norm)
+            cost(path, augmentedWeights, norm)
 
         proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
             tspCost(path)
@@ -69,9 +70,10 @@ suite "Initial Temperature":
 
         let maxDist = 30.0
         let norm = 60.0
+        let augmentedWeights = buildAugmentedWeights(solution1, graph, maxDist)
 
         proc tspCost(path: seq[City]): float =
-            cost(path, graph, maxDist, norm)
+            cost(path, augmentedWeights, norm)
 
         proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
             tspCost(path)
@@ -149,9 +151,10 @@ suite "Initial Temperature":
         ]
 
         var solution2 = solution1[0 .. ^1]
+        let augmentedWeights = buildAugmentedWeights(solution1, graph, maxDist)
 
         proc tspCost(path: seq[City]): float =
-                cost(path, graph, maxDist, norm)
+                cost(path, augmentedWeights, norm)
 
         proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
                 tspCost(path)
@@ -204,8 +207,10 @@ suite "Initial Temperature":
             City(id: 4)
         ]
 
+        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
+
         proc tspCost(path: seq[City]): float =
-            cost(path, graph, maxDist, norm)
+            cost(path, augmentedWeights, norm)
 
         proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
                 tspCost(path)

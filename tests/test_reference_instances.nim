@@ -19,8 +19,9 @@ suite "Reference instances":
     let instance = loadInstance("data/instances/input-40.tsp",cities)
     let maxDist = maximumDistance(instance,connections)
     let norm = normalizer(instance,graphi)
+    let augmentedWeights = buildAugmentedWeights(instance, graphi, maxDist)
 
-    let evaluation = cost(instance,graphi,maxDist,norm)
+    let evaluation = cost(instance, augmentedWeights, norm)
 
     let refMaxDist = 4970123.962350251
     let refNorm = 181500915.901503116
@@ -42,20 +43,21 @@ suite "Reference instances":
     echo "mine:", evaluation
     echo "ref:", refEvaluation
     echo  "diff", abs(evaluation - refEvaluation)
-    
+    ]#
 
     check abs(maxDist - refMaxDist) <= Epsilon
     check abs(norm - refNorm) <= Epsilon
     check abs(evaluation - refEvaluation) <= Epsilon
-    ]#
+    
 
 
   test "input-150 matches results":
     let instance = loadInstance("data/instances/input-150.tsp", cities)
     let maxDist = maximumDistance(instance, connections)
     let norm = normalizer(instance, graphi)
+    let augmentedWeights = buildAugmentedWeights(instance, graphi, maxDist)
 
-    let evaluation = cost(instance, graphi, maxDist, norm)
+    let evaluation = cost(instance, augmentedWeights, norm)
 
     let refMaxDist = 4978506.478459956
     let refNorm = 722598784.973402858
