@@ -16,25 +16,26 @@ let testGraph = Graph(
     ]
 )
 
-let initialSolution = @[
+let cities = @[
     City(id: 1),
     City(id: 3),
     City(id: 2),
     City(id: 4)
 ]
+let initialSolution = @[0, 2, 1, 3]
 
 let maxDist = 1000.0
 let norm = 3000.0
-let augmentedWeights = buildAugmentedWeights(initialSolution, testGraph, maxDist)
+let augmentedWeights = buildAugmentedWeights(cities, testGraph, maxDist)
 
-proc tspCost(path: seq[City]): float =
+proc tspCost(path: seq[int]): float =
     cost(path, augmentedWeights, norm)
 
 
-proc testFeasible(path: seq[City]): bool =
+proc testFeasible(path: seq[int]): bool =
     isFeasible(path, testGraph)
 
-proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
     tspCost(path)
 
 let cfg = ThresholdConfig(

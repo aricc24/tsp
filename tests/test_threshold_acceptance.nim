@@ -20,21 +20,22 @@ suite "Threshold Acceptance":
             ]
         )
 
-        var solution = @[
+        let cities = @[
             City(id: 1),
             City(id: 3),
             City(id: 2),
             City(id: 4)
         ]
+        var solution = @[0, 2, 1, 3]
 
         let maxDist = 1000.0
         let norm = 3000.0
-        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        proc tspCost(path: seq[City]): float =
+        proc tspCost(path: seq[int]): float =
             cost(path, augmentedWeights, norm)
 
-        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+        proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
                 tspCost(path)
             
 
@@ -72,24 +73,25 @@ suite "Threshold Acceptance":
             ]
         )
 
-        let initialSolution = @[
+        let cities = @[
             City(id: 1),
             City(id: 3),
             City(id: 2),
             City(id: 4)
         ]
+        let initialSolution = @[0, 2, 1, 3]
 
         var solution1 = initialSolution
         var solution2 = initialSolution
 
         let maxDist = 1000.0
         let norm = 3000.0
-        let augmentedWeights = buildAugmentedWeights(initialSolution, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        proc tspCost(path: seq[City]): float =
+        proc tspCost(path: seq[int]): float =
             cost(path, augmentedWeights, norm)
 
-        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+        proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
                 tspCost(path)
             
 
@@ -134,22 +136,23 @@ suite "Threshold Acceptance":
             ]
         )
 
-        var solution = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3)
         ]
+        var solution = @[0, 1, 2]
 
         let original = solution
 
         let maxDist = 300.0
         let norm = 300.0
-        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        proc tspCost(path: seq[City]): float =
+        proc tspCost(path: seq[int]): float =
             cost(path, augmentedWeights, norm)
 
-        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+        proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
                 tspCost(path)
             
 
@@ -188,23 +191,24 @@ suite "Threshold Acceptance":
             ]
         )
 
-        var solution = @[
+        let cities = @[
             City(id: 1),
             City(id: 3),
             City(id: 2),
             City(id: 4)
         ]
+        var solution = @[0, 2, 1, 3]
 
         let original = solution
 
         let maxDist = 1000.0
         let norm = 3000.0
-        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        proc tspCost(path: seq[City]): float =
+        proc tspCost(path: seq[int]): float =
             cost(path, augmentedWeights, norm)
         
-        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+        proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
                 tspCost(path)
             
 
@@ -230,5 +234,5 @@ suite "Threshold Acceptance":
 
         check result.bestSolution.len == original.len
 
-        for city in original:
-            check city in result.bestSolution
+        for id in original:
+            check id in result.bestSolution

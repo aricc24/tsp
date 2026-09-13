@@ -20,20 +20,21 @@ suite "Batch":
             ]
         )
 
-        var solution = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3)
         ]
+        var solution = @[0, 1, 2]
 
         let maxDist = 400.0
         let norm = 500.0
-        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        proc tspCost(path: seq[City]): float =
+        proc tspCost(path: seq[int]): float =
             cost(path, augmentedWeights, norm)
         
-        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+        proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
             tspCost(path)
         
 
@@ -75,20 +76,21 @@ suite "Batch":
             ]
         )
 
-        var solution = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3)
         ]
+        var solution = @[0, 1, 2]
 
         let maxDist = 1000.0
         let norm = 2.0
-        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        proc tspCost(path: seq[City]): float =
+        proc tspCost(path: seq[int]): float =
             cost(path, augmentedWeights, norm)
     
-        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+        proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
             tspCost(path)
 
         let config = ThresholdConfig(
@@ -128,22 +130,23 @@ suite "Batch":
             ]
         )
 
-        var solution = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3)
         ]
+        var solution = @[0, 1, 2]
 
         let original = solution
 
         let maxDist = 1000.0
         let norm = 2.0
-        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        proc tspCost(path: seq[City]): float =
+        proc tspCost(path: seq[int]): float =
             cost(path, augmentedWeights, norm)
         
-        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+        proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
             tspCost(path)
 
         let config = ThresholdConfig(

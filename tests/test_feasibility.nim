@@ -1,5 +1,4 @@
 import unittest
-import ../src/models/city
 import ../src/models/graph
 import ../src/tsp/feasibility
 
@@ -15,11 +14,7 @@ suite "Feasibility":
             ]
         )
 
-        let path = @[
-            City(id: 1),
-            City(id: 2),
-            City(id: 3)
-        ]
+        let path = @[0, 1, 2]
 
         check isFeasible(path, graph) 
     
@@ -32,10 +27,6 @@ suite "Feasibility":
             ]
         )
 
-        let path = @[
-            City(id: 1),
-            City(id: 2),
-            City(id: 3)
-        ]
+        let path = @[0, 1, 2]
 
         check not isFeasible(path, graph)

@@ -11,11 +11,12 @@ const Epsilon = 1e-7
 suite "Cost": 
 
     test "Compute cost using existing connections": 
-        let path = @[
+        let cities = @[
             City(id:1), 
             City(id:2), 
             City(id:3)
         ]
+        let path = @[0, 1, 2]
 
         let graph = Graph(
             adjacencyMatrix: @[
@@ -27,7 +28,7 @@ suite "Cost":
 
         let maxDist = 200.0
         let norm = 300.0
-        let augmentedWeights = buildAugmentedWeights(path, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
         let result = cost(path, augmentedWeights, norm)
         let expected = 1.0
@@ -35,7 +36,7 @@ suite "Cost":
         check abs(result - expected) <= Epsilon
 
     test "Uses augmented weight for missimg conections": 
-        let path = @[
+        let cities = @[
             City(
                 id: 1, 
                 latitude: 0.0, 
@@ -47,6 +48,7 @@ suite "Cost":
                 longitude: 90.0
             )
         ]
+        let path = @[0, 1]
 
         let graph = Graph(
             adjacencyMatrix: @[
@@ -57,18 +59,19 @@ suite "Cost":
 
         let maxDist = 2.0
         let norm = 10.0
-        let augmentedWeights = buildAugmentedWeights(path, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        let expected = (naturalDistance(path[0], path[1]) * maxDist) / norm
+        let expected = (naturalDistance(cities[0], cities[1]) * maxDist) / norm
         let result = cost(path, augmentedWeights, norm)
         check abs(result - expected) <= 0
     
     test "Does not add an edge from last city back to fist": 
-        let path = @[
+        let cities = @[
             City(id:1),
             City(id:2), 
             City(id:3)
         ]
+        let path = @[0, 1, 2]
 
         let graph = Graph(
             adjacencyMatrix: @[
@@ -80,7 +83,7 @@ suite "Cost":
         
         let maxDist = 1000.0
         let norm = 300.0
-        let augmentedWeights = buildAugmentedWeights(path, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
         let expected = 1.0
         let result = cost(path, augmentedWeights, norm)
@@ -104,13 +107,14 @@ suite "Affected edges":
 suite "Incremental cost":
 
     test "matches full cost for two internal non-adjacent positions":
-        var path = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3),
             City(id: 4),
             City(id: 5)
         ]
+        var path = @[0, 1, 2, 3, 4]
 
         let graph = Graph(
             adjacencyMatrix: @[
@@ -124,7 +128,7 @@ suite "Incremental cost":
 
         let maxDist = 100.0
         let norm = 300.0
-        let augmentedWeights = buildAugmentedWeights(path, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
         let currentCost = cost(path, augmentedWeights, norm)
 
@@ -136,13 +140,14 @@ suite "Incremental cost":
         check abs(incremental - full) <= 0
 
     test "matches full cost for one endpoint and one internal position":
-        var path = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3),
             City(id: 4),
             City(id: 5)
         ]
+        var path = @[0, 1, 2, 3, 4]
 
         let graph = Graph(
             adjacencyMatrix: @[
@@ -156,7 +161,7 @@ suite "Incremental cost":
 
         let maxDist = 100.0
         let norm = 300.0
-        let augmentedWeights = buildAugmentedWeights(path, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
         let currentCost = cost(path, augmentedWeights, norm)
 
@@ -168,13 +173,14 @@ suite "Incremental cost":
         check abs(incremental - full) <= Epsilon
 
     test "matches full cost for two endpoints":
-        var path = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3),
             City(id: 4),
             City(id: 5)
         ]
+        var path = @[0, 1, 2, 3, 4]
 
         let graph = Graph(
             adjacencyMatrix: @[
@@ -188,7 +194,7 @@ suite "Incremental cost":
 
         let maxDist = 100.0
         let norm = 300.0
-        let augmentedWeights = buildAugmentedWeights(path, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
         let currentCost = cost(path, augmentedWeights, norm)
 
@@ -200,13 +206,14 @@ suite "Incremental cost":
         check abs(incremental - full) <= Epsilon
 
     test "matches full cost for adjacent internal positions":
-        var path = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3),
             City(id: 4),
             City(id: 5)
         ]
+        var path = @[0, 1, 2, 3, 4]
 
         let graph = Graph(
             adjacencyMatrix: @[
@@ -220,7 +227,7 @@ suite "Incremental cost":
 
         let maxDist = 100.0
         let norm = 300.0
-        let augmentedWeights = buildAugmentedWeights(path, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
         let currentCost = cost(path, augmentedWeights, norm)
 
@@ -232,13 +239,14 @@ suite "Incremental cost":
         check abs(incremental - full) <= Epsilon
 
     test "matches full cost for adjacent endpoint and internal position":
-        var path = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3),
             City(id: 4),
             City(id: 5)
         ]
+        var path = @[0, 1, 2, 3, 4]
 
         let graph = Graph(
             adjacencyMatrix: @[
@@ -252,7 +260,7 @@ suite "Incremental cost":
 
         let maxDist = 100.0
         let norm = 300.0
-        let augmentedWeights = buildAugmentedWeights(path, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
         let currentCost = cost(path, augmentedWeights, norm)
 

@@ -21,7 +21,11 @@ suite "Reference instances":
     let norm = normalizer(instance,graphi)
     let augmentedWeights = buildAugmentedWeights(instance, graphi, maxDist)
 
-    let evaluation = cost(instance, augmentedWeights, norm)
+    var path = newSeq[int](instance.len)
+    for i in 0 ..< instance.len:
+        path[i] = instance[i].id - 1
+
+    let evaluation = cost(path, augmentedWeights, norm)
 
     let refMaxDist = 4970123.962350251
     let refNorm = 181500915.901503116
@@ -57,7 +61,11 @@ suite "Reference instances":
     let norm = normalizer(instance, graphi)
     let augmentedWeights = buildAugmentedWeights(instance, graphi, maxDist)
 
-    let evaluation = cost(instance, augmentedWeights, norm)
+    var path = newSeq[int](instance.len)
+    for i in 0 ..< instance.len:
+        path[i] = instance[i].id - 1
+
+    let evaluation = cost(path, augmentedWeights, norm)
 
     let refMaxDist = 4978506.478459956
     let refNorm = 722598784.973402858

@@ -19,20 +19,21 @@ suite "Initial Temperature":
         ]
         )
 
-        var solution = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3)
         ]
+        var solution = @[0, 1, 2]
 
         let maxDist = 30.0
         let norm = 60.0
-        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        proc tspCost(path: seq[City]): float =
+        proc tspCost(path: seq[int]): float =
             cost(path, augmentedWeights, norm)
 
-        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+        proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
             tspCost(path)
 
         let currentCost = tspCost(solution)
@@ -60,22 +61,23 @@ suite "Initial Temperature":
             ]
         )
 
-        var solution1 = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3)
         ]
 
+        var solution1 = @[0, 1, 2]
         var solution2 = solution1[0 .. ^1]
 
         let maxDist = 30.0
         let norm = 60.0
-        let augmentedWeights = buildAugmentedWeights(solution1, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        proc tspCost(path: seq[City]): float =
+        proc tspCost(path: seq[int]): float =
             cost(path, augmentedWeights, norm)
 
-        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+        proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
             tspCost(path)
 
         let currentCost1 = tspCost(solution1)
@@ -143,20 +145,21 @@ suite "Initial Temperature":
         let maxDist = 40.0
         let norm = 100.0
 
-        var solution1 = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3),
             City(id: 4)
         ]
 
+        var solution1 = @[0, 1, 2, 3]
         var solution2 = solution1[0 .. ^1]
-        let augmentedWeights = buildAugmentedWeights(solution1, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        proc tspCost(path: seq[City]): float =
+        proc tspCost(path: seq[int]): float =
                 cost(path, augmentedWeights, norm)
 
-        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+        proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
                 tspCost(path)
 
         var rng1 = initRand(123)
@@ -200,19 +203,20 @@ suite "Initial Temperature":
         let maxDist = 40.0
         let norm = 100.0
 
-        var solution = @[
+        let cities = @[
             City(id: 1),
             City(id: 2),
             City(id: 3),
             City(id: 4)
         ]
+        var solution = @[0, 1, 2, 3]
 
-        let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
+        let augmentedWeights = buildAugmentedWeights(cities, graph, maxDist)
 
-        proc tspCost(path: seq[City]): float =
+        proc tspCost(path: seq[int]): float =
             cost(path, augmentedWeights, norm)
 
-        proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+        proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
                 tspCost(path)
 
         var rng = initRand(123)
