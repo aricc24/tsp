@@ -1,23 +1,25 @@
+import std/sets
 import ../models/city
 import ../models/connection
 import ../models/graph
 import ./distance
 import std/algorithm
 
-#de momento
-proc containsCity(cities: seq[City], cityId: int): bool =
-    for city in cities: 
-        if city.id == cityId: 
-            return true
-    return false
-
 proc maximumDistance*(cities: seq[City], connections: seq[Connection]): float =
+
+    var cityIds = initHashSet[int]()
+
+    for city in cities: 
+        cityIds.incl(city.id)
+
     var maximum = 0.0
     for connection in connections:
-        if containsCity(cities, connection.city1Id) and containsCity(cities, connection.city2Id): 
+        if connection.city1Id in cityIds and
+            connection.city2Id in cityIds:
 
-            if connection. distance > maximum: 
+            if connection.distance > maximum: 
                 maximum = connection.distance
+
     return maximum
 
 proc augmentedWeight*(u: City, v:City, graph: Graph, maxDist: float): float =

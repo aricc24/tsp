@@ -2,8 +2,8 @@
 
 version       = "0.1.0"
 author        = "aricc24"
-description   = "A new awesome nimble package"
-license       = "MIT"
+description = "Traveling Salesman Problem using the Threshold Acceptance metaheuristic"
+license       = "UNAM"
 srcDir        = "src"
 
 

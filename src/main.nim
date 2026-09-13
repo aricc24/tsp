@@ -127,16 +127,17 @@ proc main() =
     let graph = buildGraph(cities, connections)
     var solution = loadInstance(options.instancePath, cities)
     let maxDist = maximumDistance(solution, connections)
+    let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
     let norm = normalizer(solution,graph)
 
     proc tspCost(path: seq[City]): float =
-        cost(path, graph, maxDist, norm)
+        cost(path, augmentedWeights, norm)
     
     proc tspFeasible(path: seq[City]): bool =
         isFeasible(path, graph)
 
     proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
-            incrementalCost(path, currentCost, i, j, graph, maxDist, norm)
+            incrementalCost(path, currentCost, i, j, augmentedWeights, norm)
         
     let config = ThresholdConfig(
         initialTemperature: options.initialTemperature,
