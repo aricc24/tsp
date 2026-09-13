@@ -1,9 +1,7 @@
 import ../models/city
-import ../models/graph
-import ./weights
 
-proc edgeCost(u: City, v: City, graph: Graph, maxDist: float, norm: float): float =
-    augmentedWeight(u, v, graph, maxDist) / norm
+proc edgeCost*(u: City, v: City, augmentedWeights: seq[seq[float]], norm: float): float =
+    augmentedWeights[u.id - 1][v.id - 1] / norm
 
 
 proc affectedEdges*(pathLen: int, i: int, j: int): seq[int] =
@@ -20,14 +18,14 @@ proc affectedEdges*(pathLen: int, i: int, j: int): seq[int] =
 
     return edges
 
-proc cost*(path: seq[City], graph: Graph, maxDist: float, norm: float): float =
+proc cost*(path: seq[City], augmentedWeights: seq[seq[float]], norm: float): float =
     var cost = 0.0
 
     for i in 1 ..< path.len: 
         let u = path[i - 1]
         let v = path[i]
 
-        cost += edgeCost(u, v, graph, maxDist, norm)
+        cost += edgeCost(u, v, augmentedWeights, norm)
 
     return cost
 
@@ -42,7 +40,7 @@ proc swappedCity(path: seq[City], index: int, i: int, j: int): City =
 
 
 proc incrementalCost*(path: seq[City], currentCost: float, i: int, j:int, 
-        graph: Graph, maxDist: float, norm: float): float = 
+        augmentedWeights:seq[seq[float]], norm: float): float = 
      
      var oldEdgesCost = 0.0
      var newEdgesCost = 0.0
@@ -53,11 +51,11 @@ proc incrementalCost*(path: seq[City], currentCost: float, i: int, j:int,
         let newU = path[edge]
         let newV = path[edge + 1]
 
-        newEdgesCost += edgeCost(newU, newV, graph, maxDist, norm)
+        newEdgesCost += edgeCost(newU, newV, augmentedWeights, norm)
 
         let oldU = swappedCity(path, edge, i, j)
         let oldV = swappedCity(path, edge + 1, i, j)
 
-        oldEdgesCost += edgeCost(oldU, oldV, graph, maxDist, norm)
+        oldEdgesCost += edgeCost(oldU, oldV, augmentedWeights, norm)
 
      return currentCost - oldEdgesCost + newEdgesCost

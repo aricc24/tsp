@@ -56,4 +56,35 @@ proc normalizer*(cities: seq[City], graph: Graph): float =
         norm += weights[i]
 
     return norm
+
+proc buildAugmentedWeights*(cities: seq[City], graph: Graph, maxDist: float):
+            seq[seq[float]] =
+
+
+    let n = graph. adjacencyMatrix.len
+    result = newSeq[seq[float]](n)
+
+    for i in 0 ..< n: 
+        result[i] = newSeq[float](n)
+
+    for i in 0 ..< cities.len:
+        for j in i + 1 ..< cities.len: 
+
+            let u = cities[i]
+            let v = cities[j]
+
+            let uIndex = u.id - 1
+            let vIndex = v.id - 1
+
+            let weight = graph.adjacencyMatrix[uIndex][vIndex]
+
+            let value = 
+                if weight > 0.0: 
+                    weight
+                else: 
+                    naturalDistance(u, v) * maxDist
+
+            result[uIndex][vIndex] = value
+            result[vIndex][uIndex] = value 
+    
             
