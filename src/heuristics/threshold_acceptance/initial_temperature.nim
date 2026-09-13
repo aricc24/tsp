@@ -1,7 +1,7 @@
 import std/random
 import ./neighbor
 
-const TemperatureTolerance* = 1e-6
+const TemperatureTolerance* = 50
 const AcceptanceTolerance* = 0.01
 
 

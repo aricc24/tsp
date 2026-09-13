@@ -125,18 +125,23 @@ proc main() =
     let connections = getConnections(options.databasePath)
 
     let graph = buildGraph(cities, connections)
-    var solution = loadInstance(options.instancePath, cities)
-    let maxDist = maximumDistance(solution, connections)
-    let augmentedWeights = buildAugmentedWeights(solution, graph, maxDist)
-    let norm = normalizer(solution,graph)
+    let citySolution = loadInstance(options.instancePath, cities)
+    let maxDist = maximumDistance(citySolution, connections)
+    let augmentedWeights = buildAugmentedWeights(citySolution, graph, maxDist)
+    let norm = normalizer(citySolution, graph)
 
-    proc tspCost(path: seq[City]): float =
+    var solution = newSeq[int](citySolution.len)
+
+    for i in 0 ..< citySolution.len:
+        solution[i] = citySolution[i].id - 1
+
+    proc tspCost(path: seq[int]): float =
         cost(path, augmentedWeights, norm)
     
-    proc tspFeasible(path: seq[City]): bool =
+    proc tspFeasible(path: seq[int]): bool =
         isFeasible(path, graph)
 
-    proc tspNeighborCost(path: seq[City], currentCost: float, i: int, j: int): float =
+    proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
             incrementalCost(path, currentCost, i, j, augmentedWeights, norm)
         
     let config = ThresholdConfig(

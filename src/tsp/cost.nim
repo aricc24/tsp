@@ -1,7 +1,6 @@
-import ../models/city
 
-proc edgeCost*(u: City, v: City, augmentedWeights: seq[seq[float]], norm: float): float =
-    augmentedWeights[u.id - 1][v.id - 1] / norm
+proc edgeCost*(u: int, v: int, augmentedWeights: seq[seq[float]], norm: float): float =
+    augmentedWeights[u][v] / norm
 
 
 proc affectedEdges*(pathLen: int, i: int, j: int): seq[int] =
@@ -18,7 +17,7 @@ proc affectedEdges*(pathLen: int, i: int, j: int): seq[int] =
 
     return edges
 
-proc cost*(path: seq[City], augmentedWeights: seq[seq[float]], norm: float): float =
+proc cost*(path: seq[int], augmentedWeights: seq[seq[float]], norm: float): float =
     var cost = 0.0
 
     for i in 1 ..< path.len: 
@@ -29,7 +28,7 @@ proc cost*(path: seq[City], augmentedWeights: seq[seq[float]], norm: float): flo
 
     return cost
 
-proc swappedCity(path: seq[City], index: int, i: int, j: int): City =
+proc swappedCity(path: seq[int], index: int, i: int, j: int): int =
     if index == i:
         return path[j]
 
@@ -39,7 +38,7 @@ proc swappedCity(path: seq[City], index: int, i: int, j: int): City =
     return path[index]
 
 
-proc incrementalCost*(path: seq[City], currentCost: float, i: int, j:int, 
+proc incrementalCost*(path: seq[int], currentCost: float, i: int, j:int, 
         augmentedWeights:seq[seq[float]], norm: float): float = 
      
      var oldEdgesCost = 0.0

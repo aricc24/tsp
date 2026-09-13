@@ -31,8 +31,8 @@ proc calculateBatch*[T](
         
         inc attempts
 
-    if accepted == 0: #soy consciente
-        return(average: currentCost, accepted: 0, currentCost: currentCost)
+        if accepted == 0: #soy consciente
+            return(average: currentCost, accepted: 0, currentCost: currentCost)
 
     return(average: totalCost/float(accepted), accepted: accepted, 
             currentCost: currentCost)
