@@ -1,4 +1,5 @@
+import ./matrix
 
 type 
     Graph* = object 
-        adjacencyMatrix*: seq[seq[float]]
+        adjacencyMatrix*: Matrix

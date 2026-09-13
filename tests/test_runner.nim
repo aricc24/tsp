@@ -6,14 +6,16 @@ import ../src/tsp/weights
 import ../src/heuristics/threshold_acceptance/config
 import ../src/runner/runner
 import ../src/tsp/feasibility
+import ../src/models/matrix
+
 
 let testGraph = Graph(
-    adjacencyMatrix: @[
+    adjacencyMatrix: toMatrix(@[
         @[0.0, 1.0, 1000.0, 1000.0],
         @[1.0, 0.0, 1.0, 1000.0],
         @[1000.0, 1.0, 0.0, 1.0],
         @[1000.0, 1000.0, 1.0, 0.0]
-    ]
+    ])
 )
 
 let cities = @[

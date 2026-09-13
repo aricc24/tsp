@@ -1,6 +1,7 @@
+import ../models/matrix
 
-proc edgeCost*(u: int, v: int, augmentedWeights: seq[seq[float]], norm: float): float =
-    augmentedWeights[u][v] / norm
+proc edgeCost*(u: int, v: int, augmentedWeights: Matrix, norm: float): float =
+    augmentedWeights[u, v] / norm
 
 
 proc affectedEdges*(pathLen: int, i: int, j: int): seq[int] =
@@ -17,7 +18,7 @@ proc affectedEdges*(pathLen: int, i: int, j: int): seq[int] =
 
     return edges
 
-proc cost*(path: seq[int], augmentedWeights: seq[seq[float]], norm: float): float =
+proc cost*(path: seq[int], augmentedWeights: Matrix, norm: float): float =
     var cost = 0.0
 
     for i in 1 ..< path.len: 
@@ -39,7 +40,7 @@ proc swappedCity(path: seq[int], index: int, i: int, j: int): int =
 
 
 proc incrementalCost*(path: seq[int], currentCost: float, i: int, j:int, 
-        augmentedWeights:seq[seq[float]], norm: float): float = 
+        augmentedWeights:Matrix, norm: float): float = 
      
      var oldEdgesCost = 0.0
      var newEdgesCost = 0.0

@@ -5,6 +5,7 @@ import ../src/models/city
 import ../src/models/graph
 import ../src/tsp/weights
 import ../src/tsp/distance
+import ../src/models/matrix
 
 const Epsilon = 1e-7
 
@@ -132,10 +133,10 @@ suite "Augmented Weight":
         )
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 100.0], 
                 @[100.0, 0.0]
-            ]
+            ])
         )
 
         let maxDist = 500.0
@@ -166,10 +167,10 @@ suite "Augmented Weight":
         )
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 0.0], 
                 @[0.0, 0.0]
-            ]
+            ])
         )
 
         let maxDist = 500.0
@@ -189,12 +190,12 @@ suite "Normalizer":
         ]
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 100.0, 400.0, 50.0],
                 @[100.0, 0.0, 300.0, 200.0],
                 @[400.0, 300.0, 0.0, 250.0],
                 @[50.0, 200.0, 250.0, 0.0]
-            ]
+            ])
         )
 
         let result = normalizer(cities, graph)
@@ -210,11 +211,11 @@ suite "Normalizer":
         ]
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 100.0, 0.0],
                 @[100.0, 0.0, 250.0],
                 @[0.0, 250.0, 0.0]
-            ]
+            ])
         )
 
         let result = normalizer(cities, graph)
@@ -232,12 +233,12 @@ suite "Normalizer":
         ]
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 10.0, 500.0, 20.0],
                 @[10.0, 0.0, 300.0,40.0],
                 @[500.0, 300.0, 0.0, 200.0],
                 @[20.0,40.0, 200.0, 0.0]
-            ]
+            ])
         )
 
         let result = normalizer(cities, graph)

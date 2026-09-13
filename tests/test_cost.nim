@@ -5,6 +5,7 @@ import ../src/tsp/cost
 import ../src/tsp/weights
 import ../src/tsp/distance
 import ../src/heuristics/threshold_acceptance/neighbor
+import ../src/models/matrix
 
 const Epsilon = 1e-7
 
@@ -19,11 +20,11 @@ suite "Cost":
         let path = @[0, 1, 2]
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 100.0, 0.0],
                 @[100.0, 0.0, 200.0],
                 @[0.0, 200.0, 0.0]
-            ]
+            ])
         )
 
         let maxDist = 200.0
@@ -51,10 +52,10 @@ suite "Cost":
         let path = @[0, 1]
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 0.0], 
                 @[0.0, 0.0]
-            ]        
+            ]    )    
         )
 
         let maxDist = 2.0
@@ -74,11 +75,11 @@ suite "Cost":
         let path = @[0, 1, 2]
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 100.0, 1000.0],
                 @[100.0, 0.0, 200.0],
                 @[1000.0, 200.0, 0.0]
-            ]
+            ])
         )
         
         let maxDist = 1000.0
@@ -117,13 +118,13 @@ suite "Incremental cost":
         var path = @[0, 1, 2, 3, 4]
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 10.0, 20.0, 30.0, 40.0],
                 @[10.0, 0.0, 50.0, 60.0, 70.0],
                 @[20.0, 50.0, 0.0, 80.0, 90.0],
                 @[30.0, 60.0, 80.0, 0.0, 100.0],
                 @[40.0, 70.0, 90.0, 100.0, 0.0]
-            ]
+            ])
         )
 
         let maxDist = 100.0
@@ -150,13 +151,13 @@ suite "Incremental cost":
         var path = @[0, 1, 2, 3, 4]
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 10.0, 20.0, 30.0, 40.0],
                 @[10.0, 0.0, 50.0, 60.0, 70.0],
                 @[20.0, 50.0, 0.0, 80.0, 90.0],
                 @[30.0, 60.0, 80.0, 0.0, 100.0],
                 @[40.0, 70.0, 90.0, 100.0, 0.0]
-            ]
+            ])
         )
 
         let maxDist = 100.0
@@ -183,13 +184,13 @@ suite "Incremental cost":
         var path = @[0, 1, 2, 3, 4]
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 10.0, 20.0, 30.0, 40.0],
                 @[10.0, 0.0, 50.0, 60.0, 70.0],
                 @[20.0, 50.0, 0.0, 80.0, 90.0],
                 @[30.0, 60.0, 80.0, 0.0, 100.0],
                 @[40.0, 70.0, 90.0, 100.0, 0.0]
-            ]
+            ])
         )
 
         let maxDist = 100.0
@@ -216,13 +217,13 @@ suite "Incremental cost":
         var path = @[0, 1, 2, 3, 4]
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 10.0, 20.0, 30.0, 40.0],
                 @[10.0, 0.0, 50.0, 60.0, 70.0],
                 @[20.0, 50.0, 0.0, 80.0, 90.0],
                 @[30.0, 60.0, 80.0, 0.0, 100.0],
                 @[40.0, 70.0, 90.0, 100.0, 0.0]
-            ]
+            ])
         )
 
         let maxDist = 100.0
@@ -249,13 +250,13 @@ suite "Incremental cost":
         var path = @[0, 1, 2, 3, 4]
 
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 10.0, 20.0, 30.0, 40.0],
                 @[10.0, 0.0, 50.0, 60.0, 70.0],
                 @[20.0, 50.0, 0.0, 80.0, 90.0],
                 @[30.0, 60.0, 80.0, 0.0, 100.0],
                 @[40.0, 70.0, 90.0, 100.0, 0.0]
-            ]
+            ])
         )
 
         let maxDist = 100.0

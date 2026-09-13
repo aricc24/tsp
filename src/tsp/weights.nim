@@ -3,6 +3,7 @@ import ../models/city
 import ../models/connection
 import ../models/graph
 import ./distance
+import ../models/matrix
 import std/algorithm
 
 proc maximumDistance*(cities: seq[City], connections: seq[Connection]): float =
@@ -27,7 +28,7 @@ proc augmentedWeight*(u: City, v:City, graph: Graph, maxDist: float): float =
     let i = u.id - 1
     let j = v.id - 1
 
-    let weight = graph. adjacencyMatrix[i][j]
+    let weight = graph.adjacencyMatrix[i, j]
 
     if weight > 0.0: 
         return weight
@@ -43,7 +44,7 @@ proc normalizer*(cities: seq[City], graph: Graph): float =
             let u = cities[i].id - 1
             let v = cities[j].id - 1
 
-            let weight = graph.adjacencyMatrix[u][v]
+            let weight = graph.adjacencyMatrix[u, v]
 
             if weight > 0.0:
                 weights.add(weight)
@@ -60,14 +61,11 @@ proc normalizer*(cities: seq[City], graph: Graph): float =
     return norm
 
 proc buildAugmentedWeights*(cities: seq[City], graph: Graph, maxDist: float):
-            seq[seq[float]] =
+            Matrix =
 
 
-    let n = graph. adjacencyMatrix.len
-    result = newSeq[seq[float]](n)
-
-    for i in 0 ..< n: 
-        result[i] = newSeq[float](n)
+    let n = graph.adjacencyMatrix.n
+    result = newMatrix(n)
 
     for i in 0 ..< cities.len:
         for j in i + 1 ..< cities.len: 
@@ -78,7 +76,7 @@ proc buildAugmentedWeights*(cities: seq[City], graph: Graph, maxDist: float):
             let uIndex = u.id - 1
             let vIndex = v.id - 1
 
-            let weight = graph.adjacencyMatrix[uIndex][vIndex]
+            let weight = graph.adjacencyMatrix[uIndex, vIndex]
 
             let value = 
                 if weight > 0.0: 
@@ -86,7 +84,7 @@ proc buildAugmentedWeights*(cities: seq[City], graph: Graph, maxDist: float):
                 else: 
                     naturalDistance(u, v) * maxDist
 
-            result[uIndex][vIndex] = value
-            result[vIndex][uIndex] = value 
+            result[uIndex, vIndex] = value
+            result[vIndex, uIndex] = value 
     
             

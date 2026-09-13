@@ -5,6 +5,7 @@ import ../src/models/graph
 import ../src/tsp/cost
 import ../src/tsp/weights
 import ../src/heuristics/threshold_acceptance/initial_temperature
+import ../src/models/matrix
 
 const Epsilon = 1e-7
 
@@ -12,11 +13,11 @@ suite "Initial Temperature":
 
     test "High temperature accepts all sampled neighbors":
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 10.0, 20.0],
                 @[10.0, 0.0, 30.0],
                 @[20.0, 30.0, 0.0]
-        ]
+        ])
         )
 
         let cities = @[
@@ -54,11 +55,11 @@ suite "Initial Temperature":
 
     test "Same seed produces the same acceptance result":
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 10.0, 20.0],
                 @[10.0, 0.0, 30.0],
                 @[20.0, 30.0, 0.0]
-            ]
+            ])
         )
 
         let cities = @[
@@ -134,12 +135,12 @@ suite "Initial Temperature":
 
     test "Initial temperature search is reproducible with same seed":
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 10.0, 20.0, 40.0],
                 @[10.0, 0.0, 30.0, 15.0],
                 @[20.0, 30.0, 0.0, 25.0],
                 @[40.0, 15.0, 25.0, 0.0]
-            ]
+            ])
         )
 
         let maxDist = 40.0
@@ -192,12 +193,12 @@ suite "Initial Temperature":
 
     test "Returned current cost matches the modified solution":
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 10.0, 20.0, 40.0],
                 @[10.0, 0.0, 30.0, 15.0],
                 @[20.0, 30.0, 0.0, 25.0],
                 @[40.0, 15.0, 25.0, 0.0]
-            ]
+            ])
         )
 
         let maxDist = 40.0

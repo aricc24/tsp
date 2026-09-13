@@ -6,6 +6,7 @@ import ../src/tsp/cost
 import ../src/tsp/weights
 import ../src/heuristics/threshold_acceptance/batch
 import ../src/heuristics/threshold_acceptance/config
+import ../src/models/matrix
 
 const Epsilon = 1e-7
 
@@ -13,11 +14,11 @@ suite "Batch":
 
     test "Completes a batch when temperature is high enough":
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 100.0, 400.0],
                 @[100.0, 0.0, 200.0],
                 @[400.0, 200.0, 0.0]
-            ]
+            ])
         )
 
         let cities = @[
@@ -69,11 +70,11 @@ suite "Batch":
 
     test "Stops when maximum attempts is reached":
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 1.0, 1000.0],
                 @[1.0, 0.0, 1.0],
                 @[1000.0, 1.0, 0.0]
-            ]
+            ])
         )
 
         let cities = @[
@@ -123,11 +124,11 @@ suite "Batch":
 
     test "Restores solution when neighbor is rejected":
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 1.0, 1000.0],
                 @[1.0, 0.0, 1.0],
                 @[1000.0, 1.0, 0.0]
-            ]
+            ])
         )
 
         let cities = @[

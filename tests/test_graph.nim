@@ -2,6 +2,7 @@ import unittest
 import ../src/models/city
 import ../src/models/connection
 import ../src/tsp/graph
+import ../src/models/matrix
 
 const Epsilon = 1e-7
 
@@ -30,11 +31,11 @@ suite "Graph":
 
         let graph = buildGraph(cities, connections)
 
-        check abs(graph.adjacencyMatrix[0][1] - 123.0) <= 0
-        check abs(graph.adjacencyMatrix[1][0] - 123.0) <= 0
+        check abs(graph.adjacencyMatrix[0, 1] - 123.0) <= 0
+        check abs(graph.adjacencyMatrix[1, 0] - 123.0) <= 0
         
-        check abs(graph.adjacencyMatrix[1][2] - 456.0) <= 0
-        check abs(graph.adjacencyMatrix[2][1] - 456.0) <= 0
+        check abs(graph.adjacencyMatrix[1, 2] - 456.0) <= 0
+        check abs(graph.adjacencyMatrix[2, 1] - 456.0) <= 0
 
     test "Keeps zero when is no connection": 
         let cities = @[
@@ -53,8 +54,8 @@ suite "Graph":
 
         let graph = buildGraph(cities, connections)
 
-        check abs(graph.adjacencyMatrix[0][2]) <= 0
-        check abs(graph.adjacencyMatrix[2][0]) >= 0
+        check abs(graph.adjacencyMatrix[0, 2]) <= 0
+        check abs(graph.adjacencyMatrix[2, 0]) >= 0
     
     test "Keeps zero on the diagonal": 
         let cities = @[
@@ -72,6 +73,6 @@ suite "Graph":
 
         let graph = buildGraph(cities, connections)
 
-        check abs(graph.adjacencyMatrix[0][0]) <= 0
-        check abs(graph.adjacencyMatrix[1][1]) <= 0
+        check abs(graph.adjacencyMatrix[0, 0]) <= 0
+        check abs(graph.adjacencyMatrix[1, 1]) <= 0
  

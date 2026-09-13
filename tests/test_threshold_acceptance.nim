@@ -6,18 +6,19 @@ import ../src/tsp/cost
 import ../src/tsp/weights
 import ../src/heuristics/threshold_acceptance/config
 import ../src/heuristics/threshold_acceptance/threshold_acceptance
+import ../src/models/matrix
 
 
 suite "Threshold Acceptance":
 
     test "Best solution is not worse than initial solution":
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 1.0, 1000.0, 1000.0],
                 @[1.0, 0.0, 1.0, 1000.0],
                 @[1000.0, 1.0, 0.0, 1.0],
                 @[1000.0, 1000.0, 1.0, 0.0]
-            ]
+            ])
         )
 
         let cities = @[
@@ -65,12 +66,12 @@ suite "Threshold Acceptance":
     
     test "Same seed produces the same result":
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 1.0, 1000.0, 1000.0],
                 @[1.0, 0.0, 1.0, 1000.0],
                 @[1000.0, 1.0, 0.0, 1.0],
                 @[1000.0, 1000.0, 1.0, 0.0]
-            ]
+            ])
         )
 
         let cities = @[
@@ -129,11 +130,11 @@ suite "Threshold Acceptance":
 
     test "Returns initial solution when temperature is already below epsilon":
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 100.0, 300.0],
                 @[100.0, 0.0, 200.0],
                 @[300.0, 200.0, 0.0]
-            ]
+            ])
         )
 
         let cities = @[
@@ -183,12 +184,12 @@ suite "Threshold Acceptance":
 
     test "Best solution preserves the original permutation":
         let graph = Graph(
-            adjacencyMatrix: @[
+            adjacencyMatrix: toMatrix(@[
                 @[0.0, 1.0, 1000.0, 1000.0],
                 @[1.0, 0.0, 1.0, 1000.0],
                 @[1000.0, 1.0, 0.0, 1.0],
                 @[1000.0, 1000.0, 1.0, 0.0]
-            ]
+            ])
         )
 
         let cities = @[
