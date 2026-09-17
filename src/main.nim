@@ -169,7 +169,12 @@ proc main() =
     #echo "Initial cost: ", initialCost
     echo "Best cost: ", result.bestCost
     echo "Best seed:", result.bestSeed
-    #echo "Best solution:", result.bestSolution
+    var route = ""
+    for i in 0 ..< result.bestSolution.len:
+        if i > 0:
+            route.add(",")
+        route.add($(result.bestSolution[i] + 1))
+    echo "Best solution: ", route    
     echo "Feasible: ",
         if isFeasible(result.bestSolution, graph):
             "YES"
