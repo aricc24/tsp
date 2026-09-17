@@ -12,6 +12,8 @@ proc calculateBatch*[T](
     var accepted = 0
     var attempts = 0
     var totalCost = 0.0
+    
+    var file = open("evaluations.txt", fmAppend)
 
     while accepted < config.batchSize and attempts < config.maxAttempts: 
         let move = neighbor(solution, rng)
@@ -22,6 +24,8 @@ proc calculateBatch*[T](
             inc accepted
             totalCost += neighborCost
 
+            file.writeLine(currentCost)
+
             if neighborCost < bestCost: 
                 bestCost = neighborCost
                 bestSolution = solution[0 .. ^1]
@@ -30,6 +34,8 @@ proc calculateBatch*[T](
             swapPositions(solution, move.i, move.j)
         
         inc attempts
+        
+    file.close()
 
     if accepted == 0:
         return(average: currentCost, accepted: 0, currentCost: currentCost)
