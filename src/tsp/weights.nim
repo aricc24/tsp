@@ -1,3 +1,11 @@
+#[
+Provides weight-related utilities for the TSP problem.
+
+This module computes the maximum existing distance, assigns augmented weights
+to missing connections, calculates the normalization factor, and builds the
+augmented weight matrix used to evaluate TSP solutions.
+]#
+
 import std/sets
 import ../models/city
 import ../models/connection
@@ -6,6 +14,10 @@ import ./distance
 import ../models/matrix
 import std/algorithm
 
+#[
+Finds the maximum distance among the connections whose cities belong to
+the given TSP instance.
+]#
 proc maximumDistance*(cities: seq[City], connections: seq[Connection]): float =
 
     var cityIds = initHashSet[int]()
@@ -23,6 +35,13 @@ proc maximumDistance*(cities: seq[City], connections: seq[Connection]): float =
 
     return maximum
 
+#[
+Returns the weight between two cities.
+
+If the connection exists in the original graph, its stored distance is used.
+Otherwise, an augmented weight is computed from the natural distance and
+the maximum distance of the instance.
+]#
 proc augmentedWeight*(u: City, v:City, graph: Graph, maxDist: float): float =
     
     let i = u.id - 1
@@ -35,6 +54,13 @@ proc augmentedWeight*(u: City, v:City, graph: Graph, maxDist: float): float =
 
     return naturalDistance(u, v) * maxDist
 
+
+#[
+Calculates the normalization factor for a TSP instance.
+
+The normalizer is obtained by summing the largest existing edge weights
+required by the instance.
+]#
 proc normalizer*(cities: seq[City], graph: Graph): float =
     var weights: seq[float] = @[]
 
@@ -60,6 +86,12 @@ proc normalizer*(cities: seq[City], graph: Graph): float =
 
     return norm
 
+#[
+Builds the augmented weight matrix for the cities in a TSP instance.
+
+Existing connections keep their original weights, while missing connections
+receive a weight based on their natural distance and the maximum distance.
+]#
 proc buildAugmentedWeights*(cities: seq[City], graph: Graph, maxDist: float):
             Matrix =
 

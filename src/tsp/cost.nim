@@ -1,9 +1,22 @@
+#[
+Provides cost evaluation utilities for TSP solutions.
+
+This module computes normalized edge costs, evaluates complete paths, identifies
+the edges affected by a swap, and updates the solution cost incrementally
+without recalculating the entire path.
+]#
+
 import ../models/matrix
 
+#[
+Returns the normalized cost of an edge between two cities.
+]#
 proc edgeCost*(u: int, v: int, augmentedWeights: Matrix, norm: float): float =
     augmentedWeights[u, v] / norm
 
-
+#[
+Returns the indices of the path edges affected by swapping two positions.
+]#
 proc affectedEdges*(pathLen: int, i: int, j: int): seq[int] =
     var edges: seq[int] = @[]
 
@@ -18,6 +31,9 @@ proc affectedEdges*(pathLen: int, i: int, j: int): seq[int] =
 
     return edges
 
+#[
+Calculates the total normalized cost of a complete path.
+]#
 proc cost*(path: seq[int], augmentedWeights: Matrix, norm: float): float =
     var cost = 0.0
 
@@ -29,6 +45,9 @@ proc cost*(path: seq[int], augmentedWeights: Matrix, norm: float): float =
 
     return cost
 
+#[
+Returns the city that occupied a given position before swapping positions i and j.
+]#
 proc swappedCity(path: seq[int], index: int, i: int, j: int): int =
     if index == i:
         return path[j]
@@ -38,7 +57,12 @@ proc swappedCity(path: seq[int], index: int, i: int, j: int): int =
 
     return path[index]
 
+#[
+Calculates the cost after a swap by updating only the affected edges.
 
+The procedure subtracts the previous cost of the affected edges and adds
+their new cost, avoiding a complete reevaluation of the path.
+]#
 proc incrementalCost*(path: seq[int], currentCost: float, i: int, j:int, 
         augmentedWeights:Matrix, norm: float): float = 
      

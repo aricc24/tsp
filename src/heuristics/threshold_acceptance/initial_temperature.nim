@@ -1,14 +1,32 @@
+#[
+Provides the procedures used to estimate the initial temperature for the
+Threshold Acceptance heuristic.
+
+It computes the acceptance rate for a sample of neighbor solutions, adjusts
+the temperature until the target acceptance rate is bracketed, and then uses
+binary search to obtain a suitable initial temperature.
+
+The module also defines the tolerances used for the temperature search and
+acceptance-rate comparison.
+]#
+
 import std/random
 import ./neighbor
 
 const TemperatureTolerance* = 50.0
 const AcceptanceTolerance* = 0.01
 
-
+#[
+Calculates the acceptance rate for a sample of neighbor solutions at a given
+temperature. Returns the acceptance rate and the cost of the resulting solution.
+]#
 proc calculateAcceptanceRate*[T](
-        solution: var seq[T], currentCost: float, temperature: float, sampleSize: int, rng: var Rand, 
-                neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float):
-                        tuple[rate: float, currentCost: float] =
+        solution: var seq[T], 
+        currentCost: float, temperature: float, 
+        sampleSize: int, rng: var Rand, 
+        neighborCostFunction:proc(solution: seq[T], currentCost: float, i: int, j: int): float
+        ):
+                tuple[rate: float, currentCost: float] =
 
     var currentCost = currentCost
     var accepted = 0
@@ -25,12 +43,17 @@ proc calculateAcceptanceRate*[T](
 
     return (rate: float(accepted)/float(sampleSize), currentCost: currentCost)
 
-
+#[
+Searches for a temperature whose acceptance rate is close to the target
+acceptance rate using binary search. Returns the estimated temperature and
+the cost of the resulting solution.
+]#
 proc binarySearchTemperature*[T](
-        solution: var seq[T], currentCost: float, lower: float, upper: float, targetAcceptance: float, 
-            sampleSize: int, rng: var Rand, 
-                neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float): 
-                    tuple[temperature: float, currentCost: float] =
+        solution: var seq[T], currentCost: float, lower: float, upper: float, 
+        targetAcceptance: float, sampleSize: int, rng: var Rand, 
+        neighborCostFunction:proc(solution: seq[T], currentCost: float, i: int, j: int): float
+        ): 
+                tuple[temperature: float, currentCost: float] =
 
     var currentCost = currentCost
     var lower = lower
@@ -39,8 +62,8 @@ proc binarySearchTemperature*[T](
     while upper - lower > TemperatureTolerance:
         let middle = (lower + upper)/2.0
 
-        let acceptanceResult = calculateAcceptanceRate(solution, currentCost, middle, sampleSize, 
-                                    rng, neighborCostFunction)
+        let acceptanceResult = calculateAcceptanceRate(solution, currentCost,
+                                middle, sampleSize, rng, neighborCostFunction)
 
         currentCost = acceptanceResult.currentCost
         let acceptanceRate = acceptanceResult.rate
@@ -56,16 +79,24 @@ proc binarySearchTemperature*[T](
     return (temperature: (lower + upper)/2.0, currentCost: currentCost)
 
 
+#[
+Determines an initial temperature for the Threshold Acceptance heuristic.
+It expands the search interval until the target acceptance rate is bracketed
+and then refines the temperature using binary search.
+]#
 proc initialTemperature*[T](
         solution: var seq[T], costFunction: proc(solution: seq[T]): float, initialGuess: float,
-            targetAcceptance: float, sampleSize: int, rng: var Rand, 
-                neighborCostFunction: proc(solution: seq[T], currentCost: float, i: int, j: int): float): 
-                        tuple[temperature: float, currentCost: float] =
+        targetAcceptance: float, sampleSize: int, rng: var Rand, 
+        neighborCostFunction: 
+        proc(solution: seq[T], currentCost: float, i: int, j: int): float
+        ): 
+                tuple[temperature: float, currentCost: float] =
 
     var t = initialGuess
     var currentCost = costFunction(solution)     
 
-    var sample = calculateAcceptanceRate(solution, currentCost, t, sampleSize, rng, neighborCostFunction)
+    var sample = calculateAcceptanceRate(solution, currentCost, t, 
+                sampleSize, rng, neighborCostFunction)
 
     if abs(targetAcceptance - sample.rate) <= AcceptanceTolerance:
         return (temperature: t, currentCost: sample.currentCost)
@@ -76,18 +107,18 @@ proc initialTemperature*[T](
         while sample.rate < targetAcceptance:
             t *= 2.0
             sample = calculateAcceptanceRate(solution, sample.currentCost, t, 
-                            sampleSize, rng, neighborCostFunction)
+                     sampleSize, rng, neighborCostFunction)
         lower = t/2.0
         upper = t
     else:
         while sample.rate > targetAcceptance:
             t /= 2.0
             sample = calculateAcceptanceRate(solution, sample.currentCost, t, 
-                                sampleSize, rng, neighborCostFunction)
+                    sampleSize, rng, neighborCostFunction)
         lower = t
         upper = t * 2.0
 
     let final = binarySearchTemperature(solution, sample.currentCost, lower, upper, 
-                    targetAcceptance, sampleSize, rng, neighborCostFunction)
+                targetAcceptance, sampleSize, rng, neighborCostFunction)
 
     return (temperature: final.temperature, currentCost: final.currentCost)

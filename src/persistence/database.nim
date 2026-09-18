@@ -1,8 +1,21 @@
+#[
+Provides access to the TSP database.
+
+This module retrieves cities and connections from the SQLite database
+and converts the query results into the corresponding data structures.
+]#
+
 import db_connector/db_sqlite
 import ../models/city 
 import ../models/connection
 import std/strutils
 
+#[
+Retrieves all cities stored in the database.
+
+Returns a sequence of City objects containing their identifiers,
+descriptive information, population, and geographic coordinates.
+]#
 proc getCities*(databasePath: string): seq[City] =
     let db = open(databasePath, "", "", "")
     defer: db.close()
@@ -27,6 +40,13 @@ proc getCities*(databasePath: string): seq[City] =
 
     return cities
 
+
+#[
+Retrieves all connections stored in the database.
+
+Returns a sequence of Connection objects containing the identifiers
+of the connected cities and the distance between them.
+]#
 proc getConnections*(databasePath: string): seq[Connection] =
     let db = open(databasePath, "", "", "")
     defer: db.close()

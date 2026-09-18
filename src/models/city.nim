@@ -1,3 +1,9 @@
+#[
+Defines the data structure used to represent cities in the TSP problem.
+
+Each city stores its identifier, descriptive information, population,
+and geographic coordinates.
+]#
 
 type
   City* = object

@@ -1,3 +1,11 @@
+# Executes multiple runs of the TSP heuristic in parallel.
+# The script loads the experiment parameters from the configuration file,
+# distributes the total number of runs among the available processes,
+# and assigns a different range of seeds to each process.
+#
+# Usage:
+#   ./scripts/tsp.sh <instance>
+
 set -e
 
 if [ "$#" -ne 1 ]; then
@@ -30,11 +38,6 @@ for ((i=0; i<PROCESSES; i++)); do
     if [ "$i" -lt "$REMAINDER" ]; then
         RUNS=$((RUNS + 1))
     fi
-
-    #echo "Launching process $i:"
-    #echo "  Runs: $RUNS"
-    #echo "  Base seed: $CURRENT_SEED"
-    #echo
 
     ./src/main \
         --db:"$DB" \
