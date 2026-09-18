@@ -1,7 +1,15 @@
+#[
+Provides the command-line entry point for the TSP solver.
+
+This module parses and validates execution parameters, loads the database and
+TSP instance, builds the graph and cost structures, configures the Threshold
+Acceptance heuristic, executes multiple runs, and displays the best result.
+]#
+
 import parseopt
-import random
 import strutils
-import ./models/city
+import os
+
 import ./persistence/database
 import ./tsp/graph
 import ./tsp/weights
@@ -10,13 +18,12 @@ import ./tsp/feasibility
 import ./heuristics/threshold_acceptance/config
 import ./persistence/instance_file
 import ./runner/runner
-import ./heuristics/threshold_acceptance/threshold_acceptance
-
-#nim c -d:release src/main.nim
-#./scripts/tsp.sh  data/instances/input-150.tsp
 
 
 
+#[
+Stores the command-line options and heuristic parameters used during execution.
+]#
 type CliOptions = object
     databasePath: string
     instancePath: string
@@ -34,6 +41,12 @@ type CliOptions = object
     maxBatchesPerTemperature: int
 
 
+#[
+Parses the command-line arguments and assigns default values to optional
+execution and heuristic parameters.
+
+Returns the resulting command-line configuration.
+]#
 proc parseArguments(): CliOptions = 
     result.runs = 100
     result.seed = 67
@@ -104,11 +117,20 @@ proc parseArguments(): CliOptions =
         of cmdEnd: 
             discard
 
+#[
+Validates the required command-line options before starting the execution.
+]#
 proc validateArguments(options: CliOptions) =
     if options.databasePath.len == 0:
         raise newException(
             ValueError,
             "Missing required option: --db"
+        )
+
+    if not fileExists(options.databasePath):
+        raise newException(
+            ValueError,
+            "Database file not found: " & options.databasePath
         )
 
     if options.instancePath.len == 0:
@@ -117,6 +139,77 @@ proc validateArguments(options: CliOptions) =
             "Missing required option: --instance"
         )
 
+    if not fileExists(options.instancePath):
+        raise newException(
+            ValueError,
+            "Instance file not found: " & options.instancePath
+        )
+
+    if options.runs <= 0:
+        raise newException(
+            ValueError,
+            "Runs must be greater than zero"
+        )
+
+    if options.processId < 0:
+        raise newException(
+            ValueError,
+            "Process ID cannot be negative"
+        )
+
+    if options.initialTemperature <= 0.0:
+        raise newException(
+            ValueError,
+            "Initial temperature must be greater than zero"
+        )
+
+    if options.targetAcceptance <= 0.0 or
+            options.targetAcceptance >= 1.0:
+        raise newException(
+            ValueError,
+            "Target acceptance must be between 0 and 1"
+        )
+
+    if options.epsilon <= 0.0:
+        raise newException(
+            ValueError,
+            "Epsilon must be greater than zero"
+        )
+
+    if options.coolingFactor <= 0.0 or
+            options.coolingFactor >= 1.0:
+        raise newException(
+            ValueError,
+            "Cooling factor must be between 0 and 1"
+        )
+
+    if options.batchSize <= 0:
+        raise newException(
+            ValueError,
+            "Batch size must be greater than zero"
+        )
+
+    if options.maxAttempts <= 0:
+        raise newException(
+            ValueError,
+            "Maximum attempts must be greater than zero"
+        )
+
+    if options.maxBatchesPerTemperature <= 0:
+        raise newException(
+            ValueError,
+            "Maximum batches per temperature must be greater than zero"
+        )
+
+
+
+#[
+Executes the complete TSP solving process.
+
+It loads the problem data, constructs the required graph and weight structures,
+configures the Threshold Acceptance heuristic, performs the requested runs,
+and prints the best solution found.
+]#
 proc main() =
     let options = parseArguments()
     validateArguments(options)
@@ -156,26 +249,21 @@ proc main() =
     )
 
 
-    #let initialCost = tspCost(solution)
 
-    let result = runMultiple(solution, config, options.runs, options.seed, options.processId, tspCost, tspFeasible, tspNeighborCost)
+    let result = runMultiple(solution, config, options.runs, 
+                 options.seed, options.processId, tspCost, tspFeasible, 
+                 tspNeighborCost)
 
-    #echo options.seed, ",", result.bestCost, ",", isFeasible(result.bestSolution, graph)
 
-    #echo "Process", options.processId, "finished" 
-    #echo "Instance: ", options.instancePath
-    #echo "Runs:", options.runs
-    echo "Base seed:", options.seed
-    #echo "Initial cost: ", initialCost
-    echo "Best cost: ", result.bestCost
-    echo "Best seed:", result.bestSeed
-    var route = ""
-    for i in 0 ..< result.bestSolution.len:
-        if i > 0:
-            route.add(",")
-        route.add($(result.bestSolution[i] + 1))
-    echo "Best solution: ", route    
-    echo "Feasible: ",
+    echo ""
+    echo "=== Process ", options.processId, " finished ==="
+    echo "Instance:      ", options.instancePath
+    echo "Base seed:     ", options.seed
+    echo "Initial cost:  ", initialCost
+    echo "Best cost:     ", result.bestCost
+    echo "Best seed:     ", result.bestSeed
+    echo "Best solution: ", route
+    echo "Feasible:      ",
         if isFeasible(result.bestSolution, graph):
             "YES"
         else:
