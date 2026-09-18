@@ -1,3 +1,11 @@
+#[
+Tests the weight-related utilities used by the TSP implementation.
+
+The tests verify maximum-distance calculation, augmented weights for existing
+and missing connections, and the normalization factor used to evaluate TSP
+solutions.
+]#
+
 import unittest
 import std/math
 import ../src/models/connection
@@ -9,6 +17,12 @@ import ../src/models/matrix
 
 const Epsilon = 1e-7
 
+#[
+Test suite for maximum-distance calculation.
+
+It checks that only valid connections between cities in the instance are
+considered and that the largest valid distance is returned.
+]#
 suite "Maximum Distance":
 
     test "Returns the largest connection inside the instance":
@@ -111,6 +125,13 @@ suite "Maximum Distance":
 
         check abs(result - expected) <= 0
 
+#[
+Test suite for augmented edge weights.
+
+It verifies that existing connections keep their original weight and that
+missing connections use the natural distance multiplied by the maximum
+distance.
+]#
 suite "Augmented Weight":
 
     test "Returns original weight when connection exits": 
@@ -180,6 +201,12 @@ suite "Augmented Weight":
         check abs(result - expected) <= 0
 
 
+#[
+Test suite for the normalization factor.
+
+It checks that the normalizer sums the largest n - 1 existing weights,
+ignores missing connections, and selects weights independently of their order.
+]#
 suite "Normalizer": 
     test "Sums the largest n minus one weight": 
         let cities = @[

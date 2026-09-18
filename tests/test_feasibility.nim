@@ -1,9 +1,22 @@
+#[
+Tests the feasibility verification of TSP paths.
+
+The tests verify that a path is considered feasible when all consecutive
+cities are connected and infeasible when at least one required connection
+is missing.
+]#
+
 import unittest
 import ../src/models/graph
 import ../src/tsp/feasibility
 import ../src/models/matrix
 
+#[
+Test suite for TSP path feasibility.
 
+It checks both feasible paths with all required connections and infeasible
+paths containing a missing connection.
+]#
 suite "Feasibility":
 
     test "Returns true when all consecutive connections exist":

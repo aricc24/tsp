@@ -1,13 +1,23 @@
+#[
+Tests the natural distance calculation between cities.
+
+The tests verify that the Haversine-based distance is zero for the same city
+and produces the expected values for known positions on the equator.
+]#
 import unittest
 import ../src/models/city
 import ../src/tsp/distance
-#import ../src/persistence/database
 import std/math
 
 const Epsilon = 1e-7
 const ExpectedEarthRadius = 6_373_000.0
 
+#[
+Test suite for the natural distance function.
 
+It checks the distance from a city to itself, a quarter of the equator,
+and two opposite points on the equator.
+]#
 suite "Natural Distance": 
 
   test "Natural Distance between a city and itself": 

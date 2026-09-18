@@ -1,3 +1,12 @@
+#[
+Tests the initial temperature estimation used by the Threshold Acceptance heuristic.
+
+The tests verify acceptance behavior at high temperatures, reproducibility with
+fixed random seeds, correctness of the binary search bounds, reproducibility
+of the complete initial temperature search, and consistency between the
+returned cost and the modified solution.
+]#
+
 import unittest
 import std/random
 import ../src/models/city
@@ -9,6 +18,12 @@ import ../src/models/matrix
 
 const Epsilon = 1e-7
 
+#[
+Test suite for the initial temperature search.
+
+It checks acceptance-rate calculation, reproducibility, binary search behavior,
+temperature estimation, and consistency of the resulting solution cost.
+]#
 suite "Initial Temperature":
 
     test "High temperature accepts all sampled neighbors":

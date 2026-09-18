@@ -1,9 +1,23 @@
+#[
+Tests the neighbor generation utilities used by the Threshold Acceptance heuristic.
+
+The tests verify position swapping, permutation preservation, reproducibility
+with fixed random seeds, correct reporting of swapped positions, and the
+ability to revert a generated neighbor.
+]#
 
 import unittest
 import std/random
 import ../src/heuristics/threshold_acceptance/neighbor
 import ../src/models/city
 
+#[
+Test suite for neighbor generation and swap operations.
+
+It checks direct swaps, restoration after repeated swaps, preservation of the
+solution permutation, generation of valid neighbors, reproducibility with the
+same seed, and reversal of generated moves.
+]#
 suite "Neighbor": 
     test "Swaps two positions": 
         var solution = @[1, 2, 3, 4, 5]

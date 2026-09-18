@@ -1,3 +1,11 @@
+#[
+Tests the construction of the graph representation used by the TSP problem.
+
+The tests verify that the adjacency matrix is symmetric for undirected
+connections, that missing connections remain zero, and that diagonal entries
+are kept at zero.
+]#
+
 import unittest
 import ../src/models/city
 import ../src/models/connection
@@ -6,6 +14,13 @@ import ../src/models/matrix
 
 const Epsilon = 1e-7
 
+
+#[
+Test suite for graph construction.
+
+It checks the creation of an undirected adjacency matrix, the representation
+of missing connections, and the values stored on the main diagonal.
+]#
 suite "Graph": 
     
     test "Build an undirected adjacency matrix": 

@@ -1,3 +1,11 @@
+#[
+Tests the implementation against reference TSP instances.
+
+The tests load predefined instances from the database and instance files,
+compute the maximum distance, normalization factor, augmented weights, and
+final path evaluation, and compare the results with known reference values.
+]#
+
 import unittest
 import ../src/persistence/database
 import ../src/persistence/instance_file
@@ -13,6 +21,12 @@ let connections = getConnections(DatabasePath)
 let graphi = buildGraph(cities, connections)
 
 
+#[
+Test suite for validating predefined TSP instances against reference results.
+
+It checks the maximum distance, normalization factor, and path evaluation
+for the input-40 and input-150 instances.
+]#
 suite "Reference instances":
 
   test "input-40 matches results":

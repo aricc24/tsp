@@ -1,3 +1,10 @@
+#[
+Tests the execution of multiple Threshold Acceptance runs.
+
+The tests verify reproducibility when using the same base seed and ensure
+that the best solution obtained across multiple runs is not worse than the
+initial solution.
+]#
 import unittest
 import ../src/models/city
 import ../src/models/graph
@@ -49,12 +56,19 @@ let cfg = ThresholdConfig(
     maxBatchesPerTemperature: 20
 )
 
+#[
+Test suite for the multiple-run execution of the Threshold Acceptance heuristic.
 
+It checks reproducibility with a fixed base seed and verifies that the runner
+correctly keeps a best result whose cost does not exceed the initial cost.
+]#
 suite "Runner":
 
     test "Same base seed produces the same result":
-        let result1 = runMultiple(initialSolution, cfg, 5, 123, 0, tspCost, testFeasible, tspNeighborCost)
-        let result2 = runMultiple(initialSolution, cfg, 5, 123, 0, tspCost, testFeasible, tspNeighborCost)
+        let result1 = runMultiple(initialSolution, cfg, 5, 123, 0, 
+                        tspCost, testFeasible, tspNeighborCost)
+        let result2 = runMultiple(initialSolution, cfg, 5, 123, 0, 
+                        tspCost, testFeasible, tspNeighborCost)
 
         check result1.bestCost == result2.bestCost
         check result1.bestSeed == result2.bestSeed
@@ -62,6 +76,7 @@ suite "Runner":
 
     test "Best result is not worse than initial solution":
         let initialCost = tspCost(initialSolution)
-        let result = runMultiple(initialSolution, cfg, 5, 123, 0, tspCost, testFeasible, tspNeighborCost)
+        let result = runMultiple(initialSolution, cfg, 5, 123, 0, 
+                        tspCost, testFeasible, tspNeighborCost)
 
         check result.bestCost <= initialCost

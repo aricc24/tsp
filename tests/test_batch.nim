@@ -1,3 +1,11 @@
+#[
+Tests the batch-processing behavior of the Threshold Acceptance heuristic.
+
+The tests verify that batches can be completed when the temperature allows
+enough accepted moves, that execution stops when the maximum number of attempts
+is reached, and that rejected neighbors correctly restore the previous solution.
+]#
+
 import unittest
 import std/random
 import ../src/models/city
@@ -9,6 +17,13 @@ import ../src/heuristics/threshold_acceptance/config
 import ../src/models/matrix
 
 const Epsilon = 1e-7
+
+#[
+Test suite for the batch execution used by the Threshold Acceptance heuristic.
+
+It checks batch completion, the maximum-attempt stopping condition,
+and the restoration of the solution after a rejected neighbor.
+]#
 
 suite "Batch":
 

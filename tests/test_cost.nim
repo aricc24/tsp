@@ -1,3 +1,11 @@
+#[
+Tests the cost evaluation utilities used by the TSP implementation.
+
+The tests verify the calculation of complete path costs, the use of augmented
+weights for missing connections, the identification of edges affected by a swap,
+and the correctness of incremental cost updates compared with full reevaluation.
+]#
+
 import unittest
 import ../src/models/city
 import ../src/models/graph
@@ -9,6 +17,13 @@ import ../src/models/matrix
 
 const Epsilon = 1e-7
 
+#[
+Test suite for complete path cost evaluation.
+
+It verifies costs using existing connections, augmented weights for missing
+connections, and confirms that the path is evaluated without adding a return
+edge from the last city to the first.
+]#
 suite "Cost": 
 
     test "Compute cost using existing connections": 
@@ -91,6 +106,12 @@ suite "Cost":
 
         check abs(result - expected) <= Epsilon
 
+#[
+Test suite for the identification of edges affected by a swap.
+
+It checks different swap configurations, including internal positions,
+endpoints, and adjacent positions.
+]#
 suite "Affected edges":
 
     test "two internal non-adjacent positions":
@@ -105,6 +126,12 @@ suite "Affected edges":
     test "two adjacent internal positions":
         check affectedEdges(5, 1, 2) == @[0, 1, 2]
 
+#[
+Test suite for incremental cost evaluation.
+
+It verifies that the incremental cost obtained after a swap matches the cost
+computed by reevaluating the complete path for different swap configurations.
+]#
 suite "Incremental cost":
 
     test "matches full cost for two internal non-adjacent positions":

@@ -1,3 +1,12 @@
+#[
+Tests the behavior of the Threshold Acceptance heuristic.
+
+The tests verify that the heuristic does not return a solution worse than the
+initial one, produces reproducible results with the same random seed, keeps the
+initial solution when the temperature is already below the stopping threshold,
+and preserves the original permutation.
+]#
+
 import unittest
 import random
 import ../src/models/city
@@ -8,7 +17,12 @@ import ../src/heuristics/threshold_acceptance/config
 import ../src/heuristics/threshold_acceptance/threshold_acceptance
 import ../src/models/matrix
 
+#[
+Test suite for the Threshold Acceptance heuristic.
 
+It checks solution quality, reproducibility, stopping behavior when the initial
+temperature is below epsilon, and preservation of the solution permutation.
+]#
 suite "Threshold Acceptance":
 
     test "Best solution is not worse than initial solution":
