@@ -1,2 +1,0 @@
-[Process 0] New best: 0.13821188785057265 | Seed: 9433578794396893 | Feasible runs: 115/117 | Run: 117/125 | Is feasible: YES
-

@@ -8,6 +8,8 @@ Implementation of the Traveling Salesman Problem (TSP) using the Threshold Accep
 * Nimble
 * SQLite
 * `db_connector`
+* Python 3
+* Matplotlib
 
 Project dependencies are declared in `tsp.nimble`.
 
@@ -71,7 +73,18 @@ If `db_connector` is not installed automatically, it can be installed with:
 nimble install db_connector
 ```
 
+### 5. Install Python plotting dependencies
+
+The project includes a Python script for plotting the evaluations generated during an experiment.
+
+Install Matplotlib with:
+
+```bash
+python3 -m pip install matplotlib
+```
+
 ## Project Structure
+
 ```text
 tsp/
 ├── config/
@@ -88,7 +101,8 @@ tsp/
 │   ├── models/
 │   │   ├── city.nim
 │   │   ├── connection.nim
-│   │   └── graph.nim
+│   │   ├── graph.nim
+│   │   └── matrix.nim
 │   ├── persistence/
 │   │   ├── database.nim
 │   │   └── instance_file.nim
@@ -108,6 +122,7 @@ tsp/
 │   └── runner/
 │       └── runner.nim
 ├── tests/
+├── plot.py
 ├── .gitignore
 ├── README.md
 └── tsp.nimble
@@ -116,7 +131,6 @@ tsp/
 ## Architecture
 
 The project separates its responsibilities into three main layers.
-
 
 ## Configuration
 
@@ -130,15 +144,12 @@ Example:
 
 ```conf
 DB=data/tsp.db
-
 BASE_SEED=231231231223124311
 TOTAL_RUNS=25
 PROCESSES=4
-
 INITIAL_TEMPERATURE=77000
 SEARCH_TEMPERATURE=true
 TARGET_ACCEPTANCE=0.90
-
 EPSILON=0.00001
 COOLING_FACTOR=0.9995
 BATCH_SIZE=4500
@@ -160,7 +171,7 @@ When:
 SEARCH_TEMPERATURE=true
 ```
 
-`INITIAL_TEMPERATURE` is used as the initial value for the automatic temperature search. The algorithm searches for a temperature whose neighbor acceptance 
+`INITIAL_TEMPERATURE` is used as the initial value for the automatic temperature search. The algorithm searches for a temperature whose neighbor acceptance rate is close to `TARGET_ACCEPTANCE`.
 
 ## Compilation
 
@@ -219,6 +230,57 @@ The executable can also be invoked directly:
     --max-attempts:44000 \
     --max-batches:50
 ```
+
+## Evaluation Logging
+
+The program can generate an `evaluations.txt` file while running an experiment.
+
+This file stores the evaluations of the solutions that are accepted by the Threshold Acceptance heuristic during the search process.
+
+The generated data can be used to inspect how the objective function changes throughout the execution and to analyze the behavior of the heuristic.
+
+The file is generated as:
+
+```text
+evaluations.txt
+```
+
+Each stored value corresponds to an accepted evaluation during the execution of the algorithm.
+
+Because this file can become very large during long experiments, it should normally not be committed to the repository.
+
+It is recommended to include it in `.gitignore`:
+
+```gitignore
+evaluations.txt
+```
+
+## Plotting the Evaluations
+
+The project includes the Python script:
+
+```text
+plot.py
+```
+
+This script reads the evaluations stored in:
+
+```text
+evaluations.txt
+```
+
+and generates a graph that can be used to inspect the behavior of the Threshold Acceptance heuristic throughout the experiment.
+
+After generating `evaluations.txt`, run:
+
+```bash
+python3 plot.py
+```
+
+The resulting graph allows the evolution of the accepted evaluations to be visualized, making it easier to observe how the heuristic explores the solution space and how the cost changes during the execution.
+
+This visualization is mainly intended for experimental analysis and for studying the convergence behavior of the heuristic.
+
 ## Tests
 
 Run the complete test suite with:
@@ -232,6 +294,7 @@ Individual tests can also be compiled and executed directly. For example:
 ```bash
 nim c -r tests/test_cost.nim
 ```
+
 ## Author
 
-**Ariadna García**  
+**Ariadna García**

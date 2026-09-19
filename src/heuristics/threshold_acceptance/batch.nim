@@ -4,6 +4,10 @@ Provides the batch evaluation logic used by the Threshold Acceptance heuristic.
 This module generates and evaluates neighboring solutions, accepts moves
 according to the current temperature, updates the best solution found, and
 computes the average cost of the accepted solutions.
+
+The commented lines related to evaluations.txt can be uncommented if the
+accepted evaluations need to be stored for later analysis or for generating
+a cost evolution plot.
 ]#
 
 import std/random
@@ -33,7 +37,10 @@ proc calculateBatch*[T](
     var attempts = 0
     var totalCost = 0.0
     
-    var file = open("evaluations.txt", fmAppend) 
+
+    # Uncomment the file-related lines to store accepted evaluations in
+    # evaluations.txt for later plotting or analysis.
+    #var file = open("evaluations.txt", fmAppend) 
 
     while accepted < config.batchSize and attempts < config.maxAttempts: 
         let move = neighbor(solution, rng)
@@ -44,7 +51,7 @@ proc calculateBatch*[T](
             inc accepted
             totalCost += neighborCost
 
-            file.writeLine(currentCost) 
+            #file.writeLine(currentCost) 
 
             if neighborCost < bestCost: 
                 bestCost = neighborCost
@@ -55,7 +62,7 @@ proc calculateBatch*[T](
         
         inc attempts
         
-    file.close()
+    #file.close()
 
     if accepted == 0:
         return(average: currentCost, accepted: 0, currentCost: currentCost)

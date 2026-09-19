@@ -1,3 +1,11 @@
+
+#Package configuration for the TSP project using the Threshold Acceptance
+#metaheuristic.
+
+#It defines the project metadata, source directory, Nim version requirement,
+#and external dependencies.
+
+
 # Package
 
 version       = "0.1.0"

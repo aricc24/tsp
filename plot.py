@@ -1,4 +1,15 @@
+"""
+Plots the evolution of the accepted solution costs produced by the
+Threshold Acceptance heuristic.
+
+The script reads the evaluations stored in evaluations.txt, samples one value
+every fixed number of evaluations, and generates a plot saved as
+evaluations.png.
+"""
+
 import matplotlib.pyplot as plt
+
+#python3 plot.py
 
 x = []
 y = []
@@ -13,8 +24,8 @@ with open("evaluations.txt", "r") as file:
 
 plt.plot(x, y)
 
-plt.xlabel("Evaluaciones aceptadas")
-plt.ylabel("Costo")
+plt.xlabel("Accepted Evaluations")
+plt.ylabel("Cost")
 plt.title("Threshold Acceptance")
 plt.grid()
 

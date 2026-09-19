@@ -236,7 +236,9 @@ proc main() =
 
     proc tspNeighborCost(path: seq[int], currentCost: float, i: int, j: int): float =
             incrementalCost(path, currentCost, i, j, augmentedWeights, norm)
-        
+
+    let initialCost = tspCost(solution)
+
     let config = ThresholdConfig(
         initialTemperature: options.initialTemperature,
         searchTemperature: options.searchTemperature,
@@ -255,20 +257,33 @@ proc main() =
                  tspNeighborCost)
 
 
+    var route = ""
+
+    for i in 0 ..< result.bestSolution.len:
+        if i > 0:
+            route.add(",")
+        if i > 0 and i mod 35 == 0:
+            route.add("\n                ")
+
+        route.add($(result.bestSolution[i] + 1))
+
     echo ""
-    echo "=== Process ", options.processId, " finished ==="
-    echo "Instance:      ", options.instancePath
-    echo "Base seed:     ", options.seed
-    echo "Initial cost:  ", initialCost
-    echo "Best cost:     ", result.bestCost
-    echo "Best seed:     ", result.bestSeed
-    echo "Best solution: ", route
-    echo "Feasible:      ",
+    echo "========================================"
+    echo " Process ", options.processId, " finished"
+    echo "========================================"
+    echo "Instance:         ", options.instancePath
+    echo "Base seed:        ", options.seed
+    echo "Initial cost:     ", initialCost
+    echo "Best cost:        ", result.bestCost
+    echo "Best seed:        ", result.bestSeed
+    echo "Feasible runs:    ", result.feasibleRuns, "/", options.runs
+    echo "Best solution:    ", route
+    echo "Feasible:         ",
         if isFeasible(result.bestSolution, graph):
             "YES"
         else:
             "NO"
-    
-        
+    echo "========================================"
+
 when isMainModule:
     main()
