@@ -1,0 +1,32 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Applegate \bgroup et al.\egroup
+  }{2006}]{applegate2006tsp}
+Applegate, D.~L.; Bixby, R.~E.; Chv{\'a}tal, V.; and Cook, W.~J.
+\newblock 2006.
+\newblock {\em The Traveling Salesman Problem: A Computational Study}.
+\newblock Princeton Series in Applied Mathematics. Princeton University Press.
+
+\bibitem[\protect\citeauthoryear{Dueck and Scheuer}{1990}]{dueck1990threshold}
+Dueck, G., and Scheuer, T.
+\newblock 1990.
+\newblock Threshold Accepting: A General Purpose Optimization Algorithm
+  Appearing Superior to Simulated Annealing.
+\newblock {\em Journal of Computational Physics} 90(1):161--175.
+
+\bibitem[\protect\citeauthoryear{Kirkpatrick, Gelatt, and
+  Vecchi}{1983}]{kirkpatrick1983annealing}
+Kirkpatrick, S.; Gelatt, C.~D.; and Vecchi, M.~P.
+\newblock 1983.
+\newblock Optimization by Simulated Annealing.
+\newblock {\em Science} 220(4598):671--680.
+
+\bibitem[\protect\citeauthoryear{Lawler \bgroup et al.\egroup
+  }{1985}]{lawler1985tsp}
+Lawler, E.~L.; Lenstra, J.~K.; Rinnooy~Kan, A. H.~G.; and Shmoys, D.~B., eds.
+\newblock 1985.
+\newblock {\em The Traveling Salesman Problem: A Guided Tour of Combinatorial
+  Optimization}.
+\newblock John Wiley \& Sons.
+
+\end{thebibliography}
