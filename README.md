@@ -281,6 +281,66 @@ The resulting graph allows the evolution of the accepted evaluations to be visua
 
 This visualization is mainly intended for experimental analysis and for studying the convergence behavior of the heuristic.
 
+## Report
+
+The project report is available in:
+
+```text
+report/report.pdf
+```
+
+The `report/` directory also contains all project-specific files required to compile the document:
+
+```text
+report/
+├── agi.bst
+├── bibliography.bib
+├── figures/
+│   ├── eval150.png
+│   ├── eval40.png
+│   ├── mapa150.png
+│   └── mapa40.png
+├── jagi.sty
+├── report.pdf
+└── report.tex
+```
+
+The files `jagi.sty` and `agi.bst` contain the document and bibliography styles used by the report, while `bibliography.bib` contains the references and `figures/` contains the images used in the document.
+
+### Compiling the report
+
+From the project root:
+
+```bash
+cd report
+latexmk -pdf report.tex
+```
+
+The generated document will be:
+
+```text
+report.pdf
+```
+
+To perform a clean compilation:
+
+```bash
+latexmk -C
+latexmk -pdf report.tex
+```
+
+Alternatively, the document can be compiled manually with:
+
+```bash
+pdflatex report.tex
+bibtex report
+pdflatex report.tex
+pdflatex report.tex
+```
+
+The repository includes the custom style files and images required by the report. Standard LaTeX packages are expected to be provided by the local TeX distribution.
+
+
 ## Tests
 
 Run the complete test suite with:
